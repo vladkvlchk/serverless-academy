@@ -1,0 +1,9 @@
+{ "name": "Vovik", "gender": "male", "age":"37" },
+{ "name": "Olga", "gender": "male", "age":"34" },
+{ "name": "Mol", "gender": "male", "age":"22" },
+{ "name": "Vitaliy", "gender": "male", "age":"37" },
+{ "name": "Kolis", "gender": "female", "age":"37" },
+{ "name": "Viktor", "gender": "male", "age":"22" },
+{ "name": "Alex", "gender": "male", "age":"30" },
+{ "name": "Vladimir", "gender": "male", "age":"40" },
+{ "name": "Oksana", "gender": "female", "age":"24" }
