@@ -12,6 +12,6 @@ bot.on('message', (msg) => {
   })
 
 // 1) run 'node bot.js' in console;
-// 2) go to Telegram and open @tre_dvi_palki_bot;
+// 2) go to Telegram and open your bot;
 // 3) send '/start' to the bot
 // 4) you can see id in console or in chat
