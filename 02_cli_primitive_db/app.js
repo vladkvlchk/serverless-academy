@@ -30,7 +30,7 @@ async function addUser() {
         },
       ]);
 
-      const foundUser = getDB().find((user) => user.name === name);
+      const foundUser = getDB().find((user) => user.name.toUpperCase() === name.toUpperCase()); //looking for a user
 
       if (foundUser) {
         console.log(`User ${name} was found.`);
