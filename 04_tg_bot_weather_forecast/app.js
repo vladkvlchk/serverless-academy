@@ -3,13 +3,13 @@ const TelegramBot = require("node-telegram-bot-api");
 
 const API_KEY = "*_*"; //PUT YOUR API KEY HERE
 const TOKEN = "0_0"; // PUT YOUR BOT TOKEN HERE
-const CHAT_ID = 0.0; // PUT YOUR CHAT ID HERE
+const CHAT_ID = 0; // PUT YOUR CHAT ID HERE
 
 const bot = new TelegramBot(TOKEN, { polling: true });
 
 const city_options = {
   reply_markup: {
-    keyboard: [[{ text: "Forecast in London"}]],
+    keyboard: [[{ text: "Forecast in London" }]],
   },
 };
 
