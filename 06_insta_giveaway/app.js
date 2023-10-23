@@ -83,9 +83,13 @@ const existInAtLeastTen = () => {
 };
 
 function main() {
+  const started = new Date();
+
   console.log(uniqueValues(), " unique values"); // 129240
   console.log(existInAllFiles(), " exist in all files"); // 67148
   console.log(existInAtLeastTen(), " exist in at least ten"); //73245
+
+  console.log("The process has taken ", (new Date() - started) / 1000, "s");
 }
 
 main();
