@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const router = require("./router");
+const { Pool } = require("pg");
 
 const PORT = 5000;
 
@@ -12,7 +13,14 @@ app.use("/", router);
 
 const start = async () => {
   try {
-    //here I will connect to the db
+    const pool = new Pool({
+      user: '',
+      host: '',
+      database: '',
+      password: '',
+      port: '',
+    })
+
     app.listen(PORT, () => {
       console.log("Server started on port ", PORT);
     });

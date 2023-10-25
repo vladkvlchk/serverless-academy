@@ -1,23 +1,13 @@
-const tokenService = require("../services/token-service");
+const userService = require("../services/user-service");
 
 class UserController {
   async signUp(req, res) {
     try {
       const { email, password } = req.body;
 
-      const { accessToken, refreshToken } = tokenService.generateTokens({
-        id: 0,
-        email,
-      });
+      const data = await userService.createUser(email, password);
 
-      res.json({
-        success: true,
-        data: {
-          id: "0",
-          accessToken,
-          refreshToken,
-        },
-      });
+      res.json({ success: true, data });
     } catch (err) {
       res.status(409).json({ success: false, error: err.message });
     }
