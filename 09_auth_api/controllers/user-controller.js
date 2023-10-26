@@ -9,6 +9,7 @@ class UserController {
 
       res.json({ success: true, data });
     } catch (err) {
+      console.log(err)
       res.status(409).json({ success: false, error: err.message });
     }
   }
@@ -17,16 +18,11 @@ class UserController {
     try {
       const { email, password } = req.body;
 
-      res.json({
-        success: true,
-        data: {
-          id: "0",
-          accessToken: "access_token",
-          refreshToken: "refresh_token",
-        },
-      });
+      const data = await userService.signIn(email, password);
+
+      res.json({ success: true, data });
     } catch (err) {
-      res.sendStatus(500);
+      res.status(404).json({ success: false, error: err.message });
     }
   }
 

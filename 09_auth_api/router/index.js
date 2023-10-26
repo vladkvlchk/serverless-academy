@@ -4,10 +4,7 @@ const userController = require("../controllers/user-controller");
 
 const router = Router();
 
-router.post("/auth/sign-in", (req, res) => {
-  res.json({ message: "ok" });
-});
-
+router.post("/auth/sign-in", userController.signIn);
 router.post("/auth/sign-up", userController.signUp);
 
 router.get("/me", authMiddleware, (req, res) => {

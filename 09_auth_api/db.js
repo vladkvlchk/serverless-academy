@@ -4,7 +4,7 @@ const pool = new Pool({
   user: "postgres",
   host: "localhost",
   database: "sls-academy",
-  password: "root",
+  password: process.env.DB_PASSWORD || "root",
   port: "5433",
 });
 
