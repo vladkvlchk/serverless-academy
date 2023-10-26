@@ -7,8 +7,13 @@ class TokenService {
     });
 
     const refreshToken = jwt.sign(payload, process.env.REFRESH_SECRET);
-    
+
     return { accessToken, refreshToken };
+  }
+
+  async verifyAccessToken(token){
+    const payload = jwt.verify(token, process.env.ACCESS_SECRET);
+    return payload
   }
 }
 

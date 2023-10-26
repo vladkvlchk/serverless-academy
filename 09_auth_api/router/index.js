@@ -7,8 +7,6 @@ const router = Router();
 router.post("/auth/sign-in", userController.signIn);
 router.post("/auth/sign-up", userController.signUp);
 
-router.get("/me", authMiddleware, (req, res) => {
-  res.json({ token: req.token });
-});
+router.get("/me", authMiddleware, userController.getMe);
 
 module.exports = router;

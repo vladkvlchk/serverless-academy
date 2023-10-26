@@ -1,9 +1,12 @@
 const userService = require("../services/user-service");
+const { checkEmail, checkPassword } = require("../validation");
 
 class UserController {
   async signUp(req, res) {
     try {
       const { email, password } = req.body;
+      checkEmail(email);
+      checkPassword(password);
 
       const data = await userService.createUser(email, password);
 
@@ -26,14 +29,15 @@ class UserController {
     }
   }
 
-  async getUser(req, res) {
+  async getMe(req, res) {
     try {
+      const {id, email} = await userService.getMe(req.token);
+
       res.json({
         success: true,
         data: {
-          id: "0",
-          accessToken: "access_token",
-          refreshToken: "refresh_token",
+          id,
+          email
         },
       });
     } catch (err) {
