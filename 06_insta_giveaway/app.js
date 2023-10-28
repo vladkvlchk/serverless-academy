@@ -61,9 +61,8 @@ const existInAtLeastTen = () => {
 
       const keys = data.split("\n");
       for (key of keys) {
-        // adding all members in one map, where values is set of indexes of files where we met them, key is username
-        const count = all_members.get(key);
-        if (!count) {
+        // adding all members in one map, where values are set of indexes of files where we met them, key is username
+        if (!all_members.get(key)) {
           all_members.set(key, new Set().add(i));
         } else {
           all_members.get(key).add(i);
