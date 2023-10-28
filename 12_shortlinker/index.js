@@ -10,26 +10,26 @@ app.use(express.json());
 const addLink = (long_link) => {
   const chars = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"; //length - 62
   const { links } = require("./db.json");
-  const last_link = Object.keys(links[links.length - 1])[0];
+  const last_link = Object.keys(links[links.length - 1])[0]; // looking for last link in database
 
-  let flag = false;
+  let flag = false; // this flag we use to know if we need to keep changing next chars (false - we need | true - we don't need)
   let short_path = last_link
     .split("")
     .reverse()
     .map((char) => {
       if(flag) return char
-      const n_i = chars.indexOf(char);
-      if (n_i !== (chars.length - 1)) flag = true; // якщо норм додається
+      
+      const n_i = chars.indexOf(char); //0-61
+      if (n_i !== (chars.length - 1)) flag = true; // if index is not 61(max value)
 
       return chars[(n_i + 1) % 62];
     })
     .reverse()
     .join('');
   
-  if (!flag){ 
-    console.log('++++')
+  if (!flag){ // adding one char like we add figure when we get 10(2 figures) after 9(1 figure), or 100(3 figures) after 99(2 figures)
     short_path += chars[0]
-}
+  }
 
   links.push({[`${short_path}`]: long_link})
   fs.writeFileSync('./db.json', JSON.stringify({links}), 'utf-8');
