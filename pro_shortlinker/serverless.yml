@@ -1,0 +1,74 @@
+org: vladkvlchk
+app: shortlinker
+service: shortlinker
+frameworkVersion: "3"
+
+custom:
+  tableName: "users-table-${sls:stage}"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt: [UsersTable, Arn]
+  environment:
+    USERS_TABLE: ${self:custom.tableName}
+
+functions:
+  sign-up:
+    handler: build/auth/sign-up.handler
+    events:
+      - http:
+          path: serverlessSetup/auth/sign-up
+          method: post
+  hello:
+    handler: build/functions/hello.handler
+    events:
+      - http:
+          path: serverlessSetup/hello
+          method: get
+  sign-in:
+    handler: build/functions/sign-in.handler
+    events:
+      - http:
+          path: serverlessSetup/sign-in
+          method: post
+
+resources:
+  Resources:
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:custom.tableName}
+    LinksTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: linkId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: linkId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: "links-table-${sls:stage}"
+
+plugins:
+  - serverless-dotenv-plugin
