@@ -36,7 +36,8 @@
         "USERS_TABLE": "users-table-dev",
         "BCRYPT_SECRET": "5",
         "ACCESS_KEY": "nfodw528dcbf15dvc04b6bmgs7",
-        "RESRESH_KEY": "qiwwc67i30hcb3f7bdsjk"
+        "RESRESH_KEY": "qiwwc67i30hcb3f7bdsjk",
+        "PRIVATE_KEY": "privateKey11"
       },
       "stage": "dev",
       "region": "us-east-1",
@@ -278,7 +279,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/shortlinker/dev/1698959520613-2023-11-02T21:12:00.613Z/shortlinker.zip"
+                "S3Key": "serverless/shortlinker/dev/1698976859176-2023-11-03T02:00:59.176Z/shortlinker.zip"
               },
               "Handler": "s_sign_up.handler",
               "Runtime": "nodejs18.x",
@@ -290,7 +291,8 @@
                   "USERS_TABLE": "users-table-dev",
                   "BCRYPT_SECRET": "5",
                   "ACCESS_KEY": "nfodw528dcbf15dvc04b6bmgs7",
-                  "RESRESH_KEY": "qiwwc67i30hcb3f7bdsjk"
+                  "RESRESH_KEY": "qiwwc67i30hcb3f7bdsjk",
+                  "PRIVATE_KEY": "privateKey11"
                 }
               },
               "Role": {
@@ -311,9 +313,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/shortlinker/dev/1698959520613-2023-11-02T21:12:00.613Z/shortlinker.zip"
+                "S3Key": "serverless/shortlinker/dev/1698976859176-2023-11-03T02:00:59.176Z/shortlinker.zip"
               },
-              "Handler": "build/functions/hello.handler",
+              "Handler": "s_hello.handler",
               "Runtime": "nodejs18.x",
               "FunctionName": "shortlinker-dev-hello",
               "MemorySize": 1024,
@@ -323,7 +325,8 @@
                   "USERS_TABLE": "users-table-dev",
                   "BCRYPT_SECRET": "5",
                   "ACCESS_KEY": "nfodw528dcbf15dvc04b6bmgs7",
-                  "RESRESH_KEY": "qiwwc67i30hcb3f7bdsjk"
+                  "RESRESH_KEY": "qiwwc67i30hcb3f7bdsjk",
+                  "PRIVATE_KEY": "privateKey11"
                 }
               },
               "Role": {
@@ -344,9 +347,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/shortlinker/dev/1698959520613-2023-11-02T21:12:00.613Z/shortlinker.zip"
+                "S3Key": "serverless/shortlinker/dev/1698976859176-2023-11-03T02:00:59.176Z/shortlinker.zip"
               },
-              "Handler": "build/functions/sign-in.handler",
+              "Handler": "s_sign_in.handler",
               "Runtime": "nodejs18.x",
               "FunctionName": "shortlinker-dev-sign-in",
               "MemorySize": 1024,
@@ -356,7 +359,8 @@
                   "USERS_TABLE": "users-table-dev",
                   "BCRYPT_SECRET": "5",
                   "ACCESS_KEY": "nfodw528dcbf15dvc04b6bmgs7",
-                  "RESRESH_KEY": "qiwwc67i30hcb3f7bdsjk"
+                  "RESRESH_KEY": "qiwwc67i30hcb3f7bdsjk",
+                  "PRIVATE_KEY": "privateKey11"
                 }
               },
               "Role": {
@@ -370,34 +374,34 @@
               "SignDashinLogGroup"
             ]
           },
-          "SignDashupLambdaVersionRGMNaS09k0c6Sylw6Q6hobwC9r6l28hSHEKSmytLc": {
+          "SignDashupLambdaVersionasiwaYZlobDcj4LcSZBfy08SRqiuwi1mkwgilFfiEl4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "SignDashupLambdaFunction"
               },
-              "CodeSha256": "Ty1i+IIxUzf62yQ4zEpUlZ8W50OSWQFAx4cpm4+rHGw="
+              "CodeSha256": "TC/87slpOQKKtYR8w7gOZ9Nnjd0SyGfyVr6amACRMuA="
             }
           },
-          "HelloLambdaVersionkpvTO65VtJlthXDjctjfnVvfxp4csOYkrlrzj1KwYS4": {
+          "HelloLambdaVersionuSqecJSiIsptaAA7Lo3BGT0YE6Haxmt8mhUQEneYb0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "HelloLambdaFunction"
               },
-              "CodeSha256": "Ty1i+IIxUzf62yQ4zEpUlZ8W50OSWQFAx4cpm4+rHGw="
+              "CodeSha256": "TC/87slpOQKKtYR8w7gOZ9Nnjd0SyGfyVr6amACRMuA="
             }
           },
-          "SignDashinLambdaVersioniWNK9javofGCvmYJSe0CJVXs86Ug0SxHozAOiylNM": {
+          "SignDashinLambdaVersionY5iOtRFDCDs49LHXSgQzM7h0VKOI2cyUqIY0gDJq8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "SignDashinLambdaFunction"
               },
-              "CodeSha256": "Ty1i+IIxUzf62yQ4zEpUlZ8W50OSWQFAx4cpm4+rHGw="
+              "CodeSha256": "TC/87slpOQKKtYR8w7gOZ9Nnjd0SyGfyVr6amACRMuA="
             }
           },
           "ApiGatewayRestApi": {
@@ -451,6 +455,18 @@
               }
             }
           },
+          "ApiGatewayResourceServerlesssetupAuthSignDashin": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceServerlesssetupAuth"
+              },
+              "PathPart": "sign-in",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
           "ApiGatewayResourceServerlesssetupHello": {
             "Type": "AWS::ApiGateway::Resource",
             "Properties": {
@@ -458,18 +474,6 @@
                 "Ref": "ApiGatewayResourceServerlesssetup"
               },
               "PathPart": "hello",
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              }
-            }
-          },
-          "ApiGatewayResourceServerlesssetupSignDashin": {
-            "Type": "AWS::ApiGateway::Resource",
-            "Properties": {
-              "ParentId": {
-                "Ref": "ApiGatewayResourceServerlesssetup"
-              },
-              "PathPart": "sign-in",
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
               }
@@ -567,13 +571,13 @@
               "HelloLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayMethodServerlesssetupSignDashinPost": {
+          "ApiGatewayMethodServerlesssetupAuthSignDashinPost": {
             "Type": "AWS::ApiGateway::Method",
             "Properties": {
               "HttpMethod": "POST",
               "RequestParameters": {},
               "ResourceId": {
-                "Ref": "ApiGatewayResourceServerlesssetupSignDashin"
+                "Ref": "ApiGatewayResourceServerlesssetupAuthSignDashin"
               },
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
@@ -613,7 +617,7 @@
               "SignDashinLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1698959497491": {
+          "ApiGatewayDeployment1698976830440": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -624,7 +628,7 @@
             "DependsOn": [
               "ApiGatewayMethodServerlesssetupAuthSignDashupPost",
               "ApiGatewayMethodServerlesssetupHelloGet",
-              "ApiGatewayMethodServerlesssetupSignDashinPost"
+              "ApiGatewayMethodServerlesssetupAuthSignDashinPost"
             ]
           },
           "SignDashupLambdaPermissionApiGateway": {
@@ -847,7 +851,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/shortlinker/dev/1698959520613-2023-11-02T21:12:00.613Z/custom-resources.zip"
+                "S3Key": "serverless/shortlinker/dev/1698976859176-2023-11-03T02:00:59.176Z/custom-resources.zip"
               },
               "FunctionName": "shortlinker-dev-custom-resource-apigw-cw-role",
               "Handler": "api-gateway-cloud-watch-role/handler.handler",
@@ -868,39 +872,20 @@
           "UsersTable": {
             "Type": "AWS::DynamoDB::Table",
             "Properties": {
+              "TableName": "Users",
               "AttributeDefinitions": [
                 {
-                  "AttributeName": "userId",
+                  "AttributeName": "email",
                   "AttributeType": "S"
                 }
               ],
               "KeySchema": [
                 {
-                  "AttributeName": "userId",
+                  "AttributeName": "email",
                   "KeyType": "HASH"
                 }
               ],
-              "BillingMode": "PAY_PER_REQUEST",
-              "TableName": "users-table-dev"
-            }
-          },
-          "LinksTable": {
-            "Type": "AWS::DynamoDB::Table",
-            "Properties": {
-              "AttributeDefinitions": [
-                {
-                  "AttributeName": "linkId",
-                  "AttributeType": "S"
-                }
-              ],
-              "KeySchema": [
-                {
-                  "AttributeName": "linkId",
-                  "KeyType": "HASH"
-                }
-              ],
-              "BillingMode": "PAY_PER_REQUEST",
-              "TableName": "links-table-dev"
+              "BillingMode": "PAY_PER_REQUEST"
             }
           }
         },
@@ -927,7 +912,7 @@
           "SignDashupLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "SignDashupLambdaVersionRGMNaS09k0c6Sylw6Q6hobwC9r6l28hSHEKSmytLc"
+              "Ref": "SignDashupLambdaVersionasiwaYZlobDcj4LcSZBfy08SRqiuwi1mkwgilFfiEl4"
             },
             "Export": {
               "Name": "sls-shortlinker-dev-SignDashupLambdaFunctionQualifiedArn"
@@ -936,7 +921,7 @@
           "HelloLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "HelloLambdaVersionkpvTO65VtJlthXDjctjfnVvfxp4csOYkrlrzj1KwYS4"
+              "Ref": "HelloLambdaVersionuSqecJSiIsptaAA7Lo3BGT0YE6Haxmt8mhUQEneYb0"
             },
             "Export": {
               "Name": "sls-shortlinker-dev-HelloLambdaFunctionQualifiedArn"
@@ -945,7 +930,7 @@
           "SignDashinLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "SignDashinLambdaVersioniWNK9javofGCvmYJSe0CJVXs86Ug0SxHozAOiylNM"
+              "Ref": "SignDashinLambdaVersionY5iOtRFDCDs49LHXSgQzM7h0VKOI2cyUqIY0gDJq8"
             },
             "Export": {
               "Name": "sls-shortlinker-dev-SignDashinLambdaFunctionQualifiedArn"
@@ -1093,10 +1078,10 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "SignDashupLambdaVersionRGMNaS09k0c6Sylw6Q6hobwC9r6l28hSHEKSmytLc"
+        "versionLogicalId": "SignDashupLambdaVersionasiwaYZlobDcj4LcSZBfy08SRqiuwi1mkwgilFfiEl4"
       },
       "hello": {
-        "handler": "build/functions/hello.handler",
+        "handler": "s_hello.handler",
         "events": [
           {
             "http": {
@@ -1112,14 +1097,14 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "HelloLambdaVersionkpvTO65VtJlthXDjctjfnVvfxp4csOYkrlrzj1KwYS4"
+        "versionLogicalId": "HelloLambdaVersionuSqecJSiIsptaAA7Lo3BGT0YE6Haxmt8mhUQEneYb0"
       },
       "sign-in": {
-        "handler": "build/functions/sign-in.handler",
+        "handler": "s_sign_in.handler",
         "events": [
           {
             "http": {
-              "path": "serverlessSetup/sign-in",
+              "path": "serverlessSetup/auth/sign-in",
               "method": "post",
               "integration": "AWS_PROXY"
             }
@@ -1131,7 +1116,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "SignDashinLambdaVersioniWNK9javofGCvmYJSe0CJVXs86Ug0SxHozAOiylNM"
+        "versionLogicalId": "SignDashinLambdaVersionY5iOtRFDCDs49LHXSgQzM7h0VKOI2cyUqIY0gDJq8"
       }
     },
     "resources": {
@@ -1139,39 +1124,20 @@
         "UsersTable": {
           "Type": "AWS::DynamoDB::Table",
           "Properties": {
+            "TableName": "Users",
             "AttributeDefinitions": [
               {
-                "AttributeName": "userId",
+                "AttributeName": "email",
                 "AttributeType": "S"
               }
             ],
             "KeySchema": [
               {
-                "AttributeName": "userId",
+                "AttributeName": "email",
                 "KeyType": "HASH"
               }
             ],
-            "BillingMode": "PAY_PER_REQUEST",
-            "TableName": "users-table-dev"
-          }
-        },
-        "LinksTable": {
-          "Type": "AWS::DynamoDB::Table",
-          "Properties": {
-            "AttributeDefinitions": [
-              {
-                "AttributeName": "linkId",
-                "AttributeType": "S"
-              }
-            ],
-            "KeySchema": [
-              {
-                "AttributeName": "linkId",
-                "KeyType": "HASH"
-              }
-            ],
-            "BillingMode": "PAY_PER_REQUEST",
-            "TableName": "links-table-dev"
+            "BillingMode": "PAY_PER_REQUEST"
           }
         }
       },
@@ -1210,7 +1176,7 @@
     "artifact": "/Users/vlad/Documents/projects/serverless-academy/pro_shortlinker/.serverless/shortlinker.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/shortlinker/dev/1698959520613-2023-11-02T21:12:00.613Z",
+    "artifactDirectoryName": "serverless/shortlinker/dev/1698976859176-2023-11-03T02:00:59.176Z",
     "artifact": "shortlinker.zip"
   }
 }

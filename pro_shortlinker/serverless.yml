@@ -27,7 +27,7 @@ provider:
 
 functions:
   sign-up:
-    handler: build/auth/sign-up.handler
+    handler: build/functions/sign-up.handler
     events:
       - http:
           path: serverlessSetup/auth/sign-up
@@ -42,7 +42,7 @@ functions:
     handler: build/functions/sign-in.handler
     events:
       - http:
-          path: serverlessSetup/sign-in
+          path: serverlessSetup/auth/sign-in
           method: post
 
 resources:
@@ -50,25 +50,14 @@ resources:
     UsersTable:
       Type: AWS::DynamoDB::Table
       Properties:
+        TableName: Users
         AttributeDefinitions:
-          - AttributeName: userId
+          - AttributeName: email
             AttributeType: S
         KeySchema:
-          - AttributeName: userId
+          - AttributeName: email
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
-        TableName: ${self:custom.tableName}
-    LinksTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        AttributeDefinitions:
-          - AttributeName: linkId
-            AttributeType: S
-        KeySchema:
-          - AttributeName: linkId
-            KeyType: HASH
-        BillingMode: PAY_PER_REQUEST
-        TableName: "links-table-${sls:stage}"
 
 plugins:
   - serverless-dotenv-plugin
