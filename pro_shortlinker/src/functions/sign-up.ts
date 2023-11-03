@@ -1,33 +1,27 @@
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import * as jwt from 'jsonwebtoken';
 import * as bcryptjs from 'bcryptjs';
-import * as AWS from 'aws-sdk';
+import checkEmail from '../validation/email';
+import checkPassword from '../validation/password';
+import userService from '../services/user-service';
+// import * as AWS from 'aws-sdk';
 
-const dynamodb = new AWS.DynamoDB.DocumentClient();
+// const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
   try {
     const body = JSON.parse(event.body);
     const { email, password } = body;
 
-    const hashedPassword = await bcryptjs.hash(password, 10);
+    //validation
+    checkEmail(email);
+    checkPassword(password);
 
-    const params = {
-      TableName: 'Users',
-      Item: {
-        email,
-        password: hashedPassword,
-      },
-    };
-
-    await dynamodb.put(params).promise();
-
-    const accessToken = 0//jwt.sign({ email }, process.env.ACCESS_KEY, { expiresIn: '1h' });
-    const refreshToken = 0//jwt.sign({ email }, process.env.REFRESH_KEY, { expiresIn: '30d' });
+    const { accessToken, refreshToken } = await userService.registration(email, password);
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ accessToken, refreshToken }), //REMOVE PASSWORD!!!
+      body: JSON.stringify({ accessToken, refreshToken }), 
     };
   } catch (error) {
     return {

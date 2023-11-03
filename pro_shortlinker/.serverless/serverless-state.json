@@ -36,7 +36,7 @@
         "USERS_TABLE": "users-table-dev",
         "BCRYPT_SECRET": "5",
         "ACCESS_KEY": "nfodw528dcbf15dvc04b6bmgs7",
-        "RESRESH_KEY": "qiwwc67i30hcb3f7bdsjk",
+        "REFRESH_KEY": "qiwwc67i30hcb3f7bdsjk",
         "PRIVATE_KEY": "privateKey11"
       },
       "stage": "dev",
@@ -119,12 +119,6 @@
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
               "LogGroupName": "/aws/lambda/shortlinker-dev-sign-up"
-            }
-          },
-          "HelloLogGroup": {
-            "Type": "AWS::Logs::LogGroup",
-            "Properties": {
-              "LogGroupName": "/aws/lambda/shortlinker-dev-hello"
             }
           },
           "SignDashinLogGroup": {
@@ -254,12 +248,6 @@
                           },
                           {
                             "Fn::GetAtt": [
-                              "HelloLogGroup",
-                              "Arn"
-                            ]
-                          },
-                          {
-                            "Fn::GetAtt": [
                               "SignDashinLogGroup",
                               "Arn"
                             ]
@@ -279,7 +267,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/shortlinker/dev/1698976859176-2023-11-03T02:00:59.176Z/shortlinker.zip"
+                "S3Key": "serverless/shortlinker/dev/1699015216124-2023-11-03T12:40:16.124Z/shortlinker.zip"
               },
               "Handler": "s_sign_up.handler",
               "Runtime": "nodejs18.x",
@@ -291,7 +279,7 @@
                   "USERS_TABLE": "users-table-dev",
                   "BCRYPT_SECRET": "5",
                   "ACCESS_KEY": "nfodw528dcbf15dvc04b6bmgs7",
-                  "RESRESH_KEY": "qiwwc67i30hcb3f7bdsjk",
+                  "REFRESH_KEY": "qiwwc67i30hcb3f7bdsjk",
                   "PRIVATE_KEY": "privateKey11"
                 }
               },
@@ -306,40 +294,6 @@
               "SignDashupLogGroup"
             ]
           },
-          "HelloLambdaFunction": {
-            "Type": "AWS::Lambda::Function",
-            "Properties": {
-              "Code": {
-                "S3Bucket": {
-                  "Ref": "ServerlessDeploymentBucket"
-                },
-                "S3Key": "serverless/shortlinker/dev/1698976859176-2023-11-03T02:00:59.176Z/shortlinker.zip"
-              },
-              "Handler": "s_hello.handler",
-              "Runtime": "nodejs18.x",
-              "FunctionName": "shortlinker-dev-hello",
-              "MemorySize": 1024,
-              "Timeout": 6,
-              "Environment": {
-                "Variables": {
-                  "USERS_TABLE": "users-table-dev",
-                  "BCRYPT_SECRET": "5",
-                  "ACCESS_KEY": "nfodw528dcbf15dvc04b6bmgs7",
-                  "RESRESH_KEY": "qiwwc67i30hcb3f7bdsjk",
-                  "PRIVATE_KEY": "privateKey11"
-                }
-              },
-              "Role": {
-                "Fn::GetAtt": [
-                  "IamRoleLambdaExecution",
-                  "Arn"
-                ]
-              }
-            },
-            "DependsOn": [
-              "HelloLogGroup"
-            ]
-          },
           "SignDashinLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
@@ -347,7 +301,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/shortlinker/dev/1698976859176-2023-11-03T02:00:59.176Z/shortlinker.zip"
+                "S3Key": "serverless/shortlinker/dev/1699015216124-2023-11-03T12:40:16.124Z/shortlinker.zip"
               },
               "Handler": "s_sign_in.handler",
               "Runtime": "nodejs18.x",
@@ -359,7 +313,7 @@
                   "USERS_TABLE": "users-table-dev",
                   "BCRYPT_SECRET": "5",
                   "ACCESS_KEY": "nfodw528dcbf15dvc04b6bmgs7",
-                  "RESRESH_KEY": "qiwwc67i30hcb3f7bdsjk",
+                  "REFRESH_KEY": "qiwwc67i30hcb3f7bdsjk",
                   "PRIVATE_KEY": "privateKey11"
                 }
               },
@@ -374,34 +328,24 @@
               "SignDashinLogGroup"
             ]
           },
-          "SignDashupLambdaVersionasiwaYZlobDcj4LcSZBfy08SRqiuwi1mkwgilFfiEl4": {
+          "SignDashupLambdaVersionl8QtufyZvXdtG7R2EX0gNmBMUT0ZyoUn8t5p88JK1js": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "SignDashupLambdaFunction"
               },
-              "CodeSha256": "TC/87slpOQKKtYR8w7gOZ9Nnjd0SyGfyVr6amACRMuA="
+              "CodeSha256": "97HQiniApgGxhS4NZUvPSxqLqUM3jJxrJ5CuyHh0MDE="
             }
           },
-          "HelloLambdaVersionuSqecJSiIsptaAA7Lo3BGT0YE6Haxmt8mhUQEneYb0": {
-            "Type": "AWS::Lambda::Version",
-            "DeletionPolicy": "Retain",
-            "Properties": {
-              "FunctionName": {
-                "Ref": "HelloLambdaFunction"
-              },
-              "CodeSha256": "TC/87slpOQKKtYR8w7gOZ9Nnjd0SyGfyVr6amACRMuA="
-            }
-          },
-          "SignDashinLambdaVersionY5iOtRFDCDs49LHXSgQzM7h0VKOI2cyUqIY0gDJq8": {
+          "SignDashinLambdaVersionDn8Nb1WE7ZK3ofZw3pBmrOp33UgkWnuMd8vTKGSrM": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "SignDashinLambdaFunction"
               },
-              "CodeSha256": "TC/87slpOQKKtYR8w7gOZ9Nnjd0SyGfyVr6amACRMuA="
+              "CodeSha256": "97HQiniApgGxhS4NZUvPSxqLqUM3jJxrJ5CuyHh0MDE="
             }
           },
           "ApiGatewayRestApi": {
@@ -467,18 +411,6 @@
               }
             }
           },
-          "ApiGatewayResourceServerlesssetupHello": {
-            "Type": "AWS::ApiGateway::Resource",
-            "Properties": {
-              "ParentId": {
-                "Ref": "ApiGatewayResourceServerlesssetup"
-              },
-              "PathPart": "hello",
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              }
-            }
-          },
           "ApiGatewayMethodServerlesssetupAuthSignDashupPost": {
             "Type": "AWS::ApiGateway::Method",
             "Properties": {
@@ -523,52 +455,6 @@
             },
             "DependsOn": [
               "SignDashupLambdaPermissionApiGateway"
-            ]
-          },
-          "ApiGatewayMethodServerlesssetupHelloGet": {
-            "Type": "AWS::ApiGateway::Method",
-            "Properties": {
-              "HttpMethod": "GET",
-              "RequestParameters": {},
-              "ResourceId": {
-                "Ref": "ApiGatewayResourceServerlesssetupHello"
-              },
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              },
-              "ApiKeyRequired": false,
-              "AuthorizationType": "NONE",
-              "Integration": {
-                "IntegrationHttpMethod": "POST",
-                "Type": "AWS_PROXY",
-                "Uri": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":apigateway:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":lambda:path/2015-03-31/functions/",
-                      {
-                        "Fn::GetAtt": [
-                          "HelloLambdaFunction",
-                          "Arn"
-                        ]
-                      },
-                      "/invocations"
-                    ]
-                  ]
-                }
-              },
-              "MethodResponses": []
-            },
-            "DependsOn": [
-              "HelloLambdaPermissionApiGateway"
             ]
           },
           "ApiGatewayMethodServerlesssetupAuthSignDashinPost": {
@@ -617,7 +503,7 @@
               "SignDashinLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1698976830440": {
+          "ApiGatewayDeployment1699015194103": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -627,7 +513,6 @@
             },
             "DependsOn": [
               "ApiGatewayMethodServerlesssetupAuthSignDashupPost",
-              "ApiGatewayMethodServerlesssetupHelloGet",
               "ApiGatewayMethodServerlesssetupAuthSignDashinPost"
             ]
           },
@@ -637,43 +522,6 @@
               "FunctionName": {
                 "Fn::GetAtt": [
                   "SignDashupLambdaFunction",
-                  "Arn"
-                ]
-              },
-              "Action": "lambda:InvokeFunction",
-              "Principal": "apigateway.amazonaws.com",
-              "SourceArn": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:",
-                    {
-                      "Ref": "AWS::Partition"
-                    },
-                    ":execute-api:",
-                    {
-                      "Ref": "AWS::Region"
-                    },
-                    ":",
-                    {
-                      "Ref": "AWS::AccountId"
-                    },
-                    ":",
-                    {
-                      "Ref": "ApiGatewayRestApi"
-                    },
-                    "/*/*"
-                  ]
-                ]
-              }
-            }
-          },
-          "HelloLambdaPermissionApiGateway": {
-            "Type": "AWS::Lambda::Permission",
-            "Properties": {
-              "FunctionName": {
-                "Fn::GetAtt": [
-                  "HelloLambdaFunction",
                   "Arn"
                 ]
               },
@@ -851,7 +699,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/shortlinker/dev/1698976859176-2023-11-03T02:00:59.176Z/custom-resources.zip"
+                "S3Key": "serverless/shortlinker/dev/1699015216124-2023-11-03T12:40:16.124Z/custom-resources.zip"
               },
               "FunctionName": "shortlinker-dev-custom-resource-apigw-cw-role",
               "Handler": "api-gateway-cloud-watch-role/handler.handler",
@@ -912,25 +760,16 @@
           "SignDashupLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "SignDashupLambdaVersionasiwaYZlobDcj4LcSZBfy08SRqiuwi1mkwgilFfiEl4"
+              "Ref": "SignDashupLambdaVersionl8QtufyZvXdtG7R2EX0gNmBMUT0ZyoUn8t5p88JK1js"
             },
             "Export": {
               "Name": "sls-shortlinker-dev-SignDashupLambdaFunctionQualifiedArn"
             }
           },
-          "HelloLambdaFunctionQualifiedArn": {
-            "Description": "Current Lambda function version",
-            "Value": {
-              "Ref": "HelloLambdaVersionuSqecJSiIsptaAA7Lo3BGT0YE6Haxmt8mhUQEneYb0"
-            },
-            "Export": {
-              "Name": "sls-shortlinker-dev-HelloLambdaFunctionQualifiedArn"
-            }
-          },
           "SignDashinLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "SignDashinLambdaVersionY5iOtRFDCDs49LHXSgQzM7h0VKOI2cyUqIY0gDJq8"
+              "Ref": "SignDashinLambdaVersionDn8Nb1WE7ZK3ofZw3pBmrOp33UgkWnuMd8vTKGSrM"
             },
             "Export": {
               "Name": "sls-shortlinker-dev-SignDashinLambdaFunctionQualifiedArn"
@@ -1078,26 +917,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "SignDashupLambdaVersionasiwaYZlobDcj4LcSZBfy08SRqiuwi1mkwgilFfiEl4"
-      },
-      "hello": {
-        "handler": "s_hello.handler",
-        "events": [
-          {
-            "http": {
-              "path": "serverlessSetup/hello",
-              "method": "get",
-              "integration": "AWS_PROXY"
-            }
-          }
-        ],
-        "name": "shortlinker-dev-hello",
-        "package": {},
-        "memory": 1024,
-        "timeout": 6,
-        "runtime": "nodejs18.x",
-        "vpc": {},
-        "versionLogicalId": "HelloLambdaVersionuSqecJSiIsptaAA7Lo3BGT0YE6Haxmt8mhUQEneYb0"
+        "versionLogicalId": "SignDashupLambdaVersionl8QtufyZvXdtG7R2EX0gNmBMUT0ZyoUn8t5p88JK1js"
       },
       "sign-in": {
         "handler": "s_sign_in.handler",
@@ -1116,7 +936,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "SignDashinLambdaVersionY5iOtRFDCDs49LHXSgQzM7h0VKOI2cyUqIY0gDJq8"
+        "versionLogicalId": "SignDashinLambdaVersionDn8Nb1WE7ZK3ofZw3pBmrOp33UgkWnuMd8vTKGSrM"
       }
     },
     "resources": {
@@ -1176,7 +996,7 @@
     "artifact": "/Users/vlad/Documents/projects/serverless-academy/pro_shortlinker/.serverless/shortlinker.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/shortlinker/dev/1698976859176-2023-11-03T02:00:59.176Z",
+    "artifactDirectoryName": "serverless/shortlinker/dev/1699015216124-2023-11-03T12:40:16.124Z",
     "artifact": "shortlinker.zip"
   }
 }

@@ -32,12 +32,6 @@ functions:
       - http:
           path: serverlessSetup/auth/sign-up
           method: post
-  hello:
-    handler: build/functions/hello.handler
-    events:
-      - http:
-          path: serverlessSetup/hello
-          method: get
   sign-in:
     handler: build/functions/sign-in.handler
     events:
