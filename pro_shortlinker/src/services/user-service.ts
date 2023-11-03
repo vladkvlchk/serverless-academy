@@ -44,12 +44,8 @@ class UserService {
     return { accessToken, refreshToken };
   }
 
-  async logIn(email: string, password: string)
-//   : Promise<TokensType> 
-  {
-    //get user with the email
-    //check if the user exist
-    //check if the password is correct
+  async logIn(email: string, password: string): Promise<TokensType> {
+    //getting user with the email
     const data = await dynamodb.get({
       TableName: "Users",
       Key: {
@@ -57,13 +53,16 @@ class UserService {
       },
     }).promise();
 
+    //checking if the user exist
     if(!data.Item){
         throw new Error("User isn\'t found")   
     }
-
+    
+    //checking if the password is correct
     const isPassEquals = await bcryptjs.compare(password, data.Item.password);
     if (!isPassEquals) throw new Error("Incorrect password");
 
+    //generating tokens
     const { accessToken, refreshToken } = tokenService.generateTokens({ email });
 
     return { accessToken, refreshToken };

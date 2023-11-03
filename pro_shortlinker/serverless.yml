@@ -22,6 +22,7 @@ provider:
             - dynamodb:DeleteItem
           Resource:
             - Fn::GetAtt: [UsersTable, Arn]
+            - Fn::GetAtt: [LinksTable, Arn]
   environment:
     USERS_TABLE: ${self:custom.tableName}
 
@@ -38,6 +39,16 @@ functions:
       - http:
           path: serverlessSetup/auth/sign-in
           method: post
+  create-link:
+    handler: build/functions/create-link.handler
+    events:
+      - http:
+          path: link/create
+          method: post
+  deleting-expired-links:
+    handler: build/functions/deleting-expired-links.handler
+    events:
+      - schedule: rate(1 day)
 
 resources:
   Resources:
@@ -50,6 +61,17 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: email
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    LinksTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Links
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
 

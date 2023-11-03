@@ -10,8 +10,8 @@ class TokenService {
     return { accessToken, refreshToken };
   }
 
-  async verifyAccessToken(token){
-    const payload = jwt.verify(token, process.env.ACCESS_SECRET);
+  verifyAccessToken(token : string) : string | jwt.JwtPayload{
+    const payload = jwt.verify(token, process.env.ACCESS_KEY);
     return payload
   }
 }

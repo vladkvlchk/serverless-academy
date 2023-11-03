@@ -1,9 +1,5 @@
 import { APIGatewayEvent, APIGatewayProxyResult } from "aws-lambda";
-import * as jwt from "jsonwebtoken";
-import * as bcryptjs from "bcryptjs";
-import * as jose from "node-jose";
 
-import AWS = require("aws-sdk");
 import userService from "../services/user-service";
 
 export const handler = async (
