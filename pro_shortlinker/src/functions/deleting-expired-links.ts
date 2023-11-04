@@ -1,43 +1,38 @@
-// import dynamodb from "../db";
+import dynamodb from "../db";
 
-// export const handler = async () => {
-//   const currentTime = Date.now();
+export const handler = async () => {
+  try {
+    const currentTime = Date.now();
 
-//   const params = {
-//     TableName: "Links",
-//     FilterExpression: "#expire_date < :currentTime",
-//     ExpressionAttributeNames: {
-//       "#expire_date": "expire_date",
-//     },
-//     ExpressionAttributeValues: {
-//       ":currentTime": currentTime,
-//     },
-//   };
+    const data = await dynamodb.scan({ TableName: "Links" }).promise();
 
-//   try {
-//     const data = await dynamodb.scan(params).promise();
+    const expired_links = data.Items.filter(
+      (item) => Date.parse(item.expiration_time) < currentTime
+    );
 
-//     if (data.Items) {
-//       for (const item of data.Items) {
-//         const deleteParams = {
-//           TableName: "Links",
-//           Key: {
-//             id: item.id, 
-//           },
-//         };
-//         await dynamodb.delete(deleteParams).promise();
-//       }
-//     }
-//     return {
-//       statusCode: 200,
-//       body: JSON.stringify({ message: "successfully deleted" }),
-//     };
-//   } catch (error) {
-//     return {
-//       statusCode: 500,
-//       body: JSON.stringify({
-//         error: "Item\' deleting error: " + error.message,
-//       }),
-//     };
-//   }
-// };
+    if (expired_links) {
+      for (const item of expired_links) {
+        const deleteParams = {
+          TableName: "Links",
+          Key: {
+            id: item.id,
+            owner_email: item.owner_email,
+          },
+        };
+        await dynamodb.delete(deleteParams).promise();
+      }
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ message: "successfully deleted" }),
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: "Item' deleting error: " + error.message,
+      }),
+    };
+  }
+};

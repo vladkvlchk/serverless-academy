@@ -60,7 +60,7 @@ functions:
   deleting-expired-links:
     handler: build/functions/deleting-expired-links.handler
     events:
-      - schedule: rate(1 day)
+      - schedule: rate(5 minutes)
 
 resources:
   Resources:
