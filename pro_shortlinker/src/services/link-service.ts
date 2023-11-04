@@ -4,11 +4,10 @@ import { LinkModelType } from "../types";
 class LinkService {
   async addLink(
     original_link: string,
-    expiration_time: string,
+    active_time: string,
     owner_email: string
   ) {
-    const chars =
-      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; //length - 62 ( sorted by chars.split('').sort().join(''); )
+    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; //length - 62 ( sorted by chars.split('').sort().join(''); )
     let id = ""; //this will be short path
 
     const data = await dynamodb.scan({ TableName: "Links" }).promise();
@@ -48,8 +47,21 @@ class LinkService {
       id += chars[0];
     }
 
+    //calculation expiration time
+    let expiration_time : number | string = Date.now();
+    if(active_time === '1 day'){
+        expiration_time += 1000 * 60 * 60 * 24
+    } else if (active_time === '3 days'){
+        expiration_time += 1000 * 60 * 60 * 24 * 3
+    } else if (active_time === '5 days'){
+        expiration_time += 1000 * 60 * 60 * 24 * 5
+    } else if (active_time === 'one-time'){
+        expiration_time = 'one-time'
+    }
+
     //assembling data
     const short_link = process.env.HOST + "/" + id;
+
     const params = {
       TableName: "Links",
       Item: {

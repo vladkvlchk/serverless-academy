@@ -1,8 +1,6 @@
 import { APIGatewayEvent, APIGatewayProxyResult } from "aws-lambda";
 
 import linkService from "../services/link-service";
-import checkDate from "../validation/date";
-import checkLink from "../validation/link";
 import tokenService from "../services/token-service";
 
 export const handler = async (
@@ -10,7 +8,9 @@ export const handler = async (
 ): Promise<APIGatewayProxyResult> => {
   try {
     const body = JSON.parse(event.body);
-    const email = tokenService.getEmailFromBearer(event.headers["Authorization"])
+    const email = tokenService.getEmailFromBearer(
+      event.headers["Authorization"]
+    );
 
     const { link_id } = body;
 
@@ -18,7 +18,7 @@ export const handler = async (
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: "Link successfully deactivated"}),
+      body: JSON.stringify({ message: "Link successfully deactivated" }),
     };
   } catch (error) {
     return {
