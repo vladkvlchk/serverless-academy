@@ -78,7 +78,7 @@ resources:
     LinksTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: LinksTable
+        TableName: Links
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S

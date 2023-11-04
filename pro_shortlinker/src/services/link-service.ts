@@ -1,4 +1,5 @@
 import dynamodb from "../db";
+import { LinkModelType } from "../types";
 
 class LinkService {
   async addLink(
@@ -10,7 +11,7 @@ class LinkService {
       "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; //length - 62 ( sorted by chars.split('').sort().join(''); )
     let id = ""; //this will be short path
 
-    const data = await dynamodb.scan({ TableName: "LinksTable" }).promise();
+    const data = await dynamodb.scan({ TableName: "Links" }).promise();
 
     const all_items = data.Items.sort((itemA, itemB) => {
       if (itemA.id.length > itemB.id.length) {
@@ -50,7 +51,7 @@ class LinkService {
     //assembling data
     const short_link = process.env.HOST + "/" + id;
     const params = {
-      TableName: "LinksTable",
+      TableName: "Links",
       Item: {
         id,
         original_link,
@@ -64,21 +65,17 @@ class LinkService {
     return params.Item;
   }
 
-  async removeLink(link_id: string, owner_email: string): Promise<void> {
+  async removeLink(id: string, owner_email: string): Promise<void> {
     //checking if user own the link
-    const data = await dynamodb
-      .get({
-        TableName: "LinksTable",
+    const data = await dynamodb.get({
+        TableName: "Links",
         Key: {
-          id: link_id,
-        },
-      })
-      .promise();
+            id,
+            owner_email
+        }
+    }).promise();
     if (!data.Item) {
       throw new Error("Link is not found");
-    }
-    if (data.Item.owner_email !== owner_email) {
-      throw new Error("User does't own this link");
     }
 
     //deleting item
@@ -86,7 +83,8 @@ class LinkService {
       .delete({
         TableName: "Links",
         Key: {
-          id: link_id,
+          id,
+          owner_email
         },
       })
       .promise();
@@ -95,7 +93,7 @@ class LinkService {
   async getLinksByEmail(email: string) {
     const data = await dynamodb
       .scan({
-        TableName: "LinksTable",
+        TableName: "Links",
         FilterExpression: "owner_email = :email",
         ExpressionAttributeValues: {
           ":email": email,

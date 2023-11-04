@@ -18,7 +18,7 @@ export const handler = async (
 
     return {
       statusCode: 200,
-      body: JSON.stringify("Link successfully deactivated"),
+      body: JSON.stringify({ message: "Link successfully deactivated"}),
     };
   } catch (error) {
     return {
