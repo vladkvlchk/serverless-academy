@@ -108,6 +108,15 @@ class LinkService {
         short_link: item.short_link,
     }))
   }
+
+  async getLinkById(id: string){
+    const data = await dynamodb.scan({TableName: "Links"}).promise();
+    const link = data.Items.find(item => item.id === id);
+    if(!link){
+        throw new Error("Link is not found")
+    }
+    return link.original_link
+  }
 }
 
 export default new LinkService();

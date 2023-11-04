@@ -1,23 +1,23 @@
-// import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-// import linkService from '../services/link-service';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import linkService from '../services/link-service';
 
-// export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-//   const id = event.pathParameters?.id;
+export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  const id = event.pathParameters?.id;
 
-//   if (!id) {
-//     return {
-//       statusCode: 400,
-//       body: JSON.stringify({ error: 'Missing id parameter' }),
-//     };
-//   }
+  if (!id) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: 'Missing id parameter' }),
+    };
+  }
 
-// //   const redirectUrl = await linkService.getLinkById();
+  const original_link = await linkService.getLinkById(id);
 
-//   return {
-//     statusCode: 302,
-//     headers: {
-//       Location: redirectUrl,
-//     },
-//     body: '',
-//   };
-// };
+  return {
+    statusCode: 302,
+    headers: {
+      Location: original_link,
+    },
+    body: '',
+  };
+};

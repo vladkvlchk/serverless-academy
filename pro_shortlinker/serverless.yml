@@ -57,6 +57,12 @@ functions:
       - http:
           path: my-links
           method: get
+  redirect:
+    handler: build/functions/redirect.handler
+    events:
+      - http:
+          path: /{id}
+          method: get
   deleting-expired-links:
     handler: build/functions/deleting-expired-links.handler
     events:
