@@ -6,22 +6,26 @@ class LinkService {
     expiration_time: string,
     owner_email: string
   ) {
-    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; //length - 62 ( sorted by chars.split('').sort().join(''); )
+    const chars =
+      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; //length - 62 ( sorted by chars.split('').sort().join(''); )
     let id = ""; //this will be short path
 
     const data = await dynamodb.scan({ TableName: "Links" }).promise();
-    
-    const all_items = data.Items.sort((itemA, itemB) => {
-        if (itemA.id.length > itemB.id.length) {
-          return 1
-        } if (itemA.id.length < itemB.id.length) {
-          return -1
-        } else {
-          return itemA.id > itemB.id ? 1 : -1
-        }
-        })
 
-    const last_link_id = all_items.length ? all_items[all_items.length - 1].id : ""; //last booked link id
+    const all_items = data.Items.sort((itemA, itemB) => {
+      if (itemA.id.length > itemB.id.length) {
+        return 1;
+      }
+      if (itemA.id.length < itemB.id.length) {
+        return -1;
+      } else {
+        return itemA.id > itemB.id ? 1 : -1;
+      }
+    });
+
+    const last_link_id = all_items.length
+      ? all_items[all_items.length - 1].id
+      : ""; //last booked link id
 
     let flag = false; // this flag we use to know if we need to keep changing next chars (false - we need | true - we don't need)
     id = last_link_id
@@ -52,12 +56,38 @@ class LinkService {
         original_link,
         short_link,
         owner_email,
-        expiration_time
+        expiration_time,
       },
     };
     await dynamodb.put(params).promise();
 
     return params.Item;
+  }
+
+  async removeLink(link_id: string, owner_email: string): Promise<void> {
+    //checking if user own the link
+    const data = await dynamodb
+      .get({
+        TableName: "Links",
+        Key: {
+          id: link_id,
+        },
+      })
+      .promise();
+    if (!data.Item) {
+      throw new Error("Link is not found");
+    }
+    if (data.Item.owner_email !== owner_email) {
+      throw new Error("User does't own this link");
+    }
+
+    //deleting item
+    await dynamodb.delete({
+      TableName: "Links",
+      Key: {
+        id: link_id,
+      },
+    }).promise();
   }
 }
 

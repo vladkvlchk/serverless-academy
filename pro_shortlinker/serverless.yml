@@ -45,6 +45,12 @@ functions:
       - http:
           path: link/create
           method: post
+  deactivate-link:
+    handler: build/functions/deactivate-link.handler
+    events:
+      - http:
+          path: link/deactivate
+          method: post
   deleting-expired-links:
     handler: build/functions/deleting-expired-links.handler
     events:
