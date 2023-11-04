@@ -7,7 +7,7 @@ export const handler = async () => {
     const data = await dynamodb.scan({ TableName: "Links" }).promise();
 
     const expired_links = data.Items.filter(
-      (item) => Date.parse(item.expiration_time) < currentTime
+        (item) => item.expiration_time < currentTime && item.expiration_time !== 'one-time'
     );
 
     if (expired_links) {
