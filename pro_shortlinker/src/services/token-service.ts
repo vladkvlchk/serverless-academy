@@ -14,6 +14,20 @@ class TokenService {
     const payload = jwt.verify(token, process.env.ACCESS_KEY);
     return payload
   }
+
+  getEmailFromBearer(bearerHeader: string): string{
+    if(!bearerHeader){
+        throw new Error("Bearer token is not found")
+    }
+    const bearer = bearerHeader.split(" ");
+    const bearerToken = bearer[1];
+    //@ts-ignore
+    const payload : { email: string } = this.verifyAccessToken(bearerToken);
+    if(!payload || !payload.email){
+        throw new Error("Token error")
+    }
+    return payload.email;
+  }
 }
 
 export default new TokenService();

@@ -10,18 +10,7 @@ export const handler = async (
 ): Promise<APIGatewayProxyResult> => {
   try {
     const body = JSON.parse(event.body);
-    const bearerHeader = event.headers["Authorization"];
-    if(!bearerHeader){
-        throw new Error("Bearer token is not found")
-    }
-    const bearer = bearerHeader.split(" ");
-    const bearerToken = bearer[1];
-    //@ts-ignore
-    const payload : { email: string } = tokenService.verifyAccessToken(bearerToken);
-    if(!payload || !payload.email){
-        throw new Error("Token error")
-    }
-    const owner_email = payload.email;
+    const email = tokenService.getEmailFromBearer(event.headers["Authorization"])
 
     const { link, expiration_time } = body;
 
@@ -29,7 +18,7 @@ export const handler = async (
     checkDate(expiration_time);
     checkLink(link);
 
-    const response = await linkService.addLink(link, expiration_time, owner_email);
+    const response = await linkService.addLink(link, expiration_time, email);
 
     return {
       statusCode: 200,

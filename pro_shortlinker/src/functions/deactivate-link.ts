@@ -10,22 +10,11 @@ export const handler = async (
 ): Promise<APIGatewayProxyResult> => {
   try {
     const body = JSON.parse(event.body);
-    const bearerHeader = event.headers["Authorization"];
-    if(!bearerHeader){
-        throw new Error("Bearer token is not found")
-    }
-    const bearer = bearerHeader.split(" ");
-    const bearerToken = bearer[1];
-    //@ts-ignore
-    const payload : { email: string } = tokenService.verifyAccessToken(bearerToken);
-    if(!payload || !payload.email){
-        throw new Error("Token error")
-    }
-    const owner_email = payload.email;
+    const email = tokenService.getEmailFromBearer(event.headers["Authorization"])
 
     const { link_id } = body;
 
-    await linkService.removeLink(link_id, owner_email);
+    await linkService.removeLink(link_id, email);
 
     return {
       statusCode: 200,

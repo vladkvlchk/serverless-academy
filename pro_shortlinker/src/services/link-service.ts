@@ -10,7 +10,7 @@ class LinkService {
       "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; //length - 62 ( sorted by chars.split('').sort().join(''); )
     let id = ""; //this will be short path
 
-    const data = await dynamodb.scan({ TableName: "Links" }).promise();
+    const data = await dynamodb.scan({ TableName: "LinksTable" }).promise();
 
     const all_items = data.Items.sort((itemA, itemB) => {
       if (itemA.id.length > itemB.id.length) {
@@ -50,7 +50,7 @@ class LinkService {
     //assembling data
     const short_link = process.env.HOST + "/" + id;
     const params = {
-      TableName: "Links",
+      TableName: "LinksTable",
       Item: {
         id,
         original_link,
@@ -68,7 +68,7 @@ class LinkService {
     //checking if user own the link
     const data = await dynamodb
       .get({
-        TableName: "Links",
+        TableName: "LinksTable",
         Key: {
           id: link_id,
         },
@@ -82,12 +82,33 @@ class LinkService {
     }
 
     //deleting item
-    await dynamodb.delete({
-      TableName: "Links",
-      Key: {
-        id: link_id,
-      },
-    }).promise();
+    await dynamodb
+      .delete({
+        TableName: "Links",
+        Key: {
+          id: link_id,
+        },
+      })
+      .promise();
+  }
+
+  async getLinksByEmail(email: string) {
+    const data = await dynamodb
+      .scan({
+        TableName: "LinksTable",
+        FilterExpression: "owner_email = :email",
+        ExpressionAttributeValues: {
+          ":email": email,
+        },
+      })
+      .promise();
+    
+    return data.Items.map(item => ({
+        id: item.id,
+        original_link: item.original_link,
+        expiration_time: item.expiration_time,
+        short_link: item.short_link,
+    }))
   }
 }
 
