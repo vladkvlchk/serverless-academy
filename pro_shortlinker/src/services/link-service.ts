@@ -127,6 +127,10 @@ class LinkService {
     if(!link){
         throw new Error("Link is not found")
     }
+
+    if(link.expiration_time === 'one-time'){
+        await this.removeLink(link.id, link.owner_email)
+    }
     return link.original_link
   }
 }
