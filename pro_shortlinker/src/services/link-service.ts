@@ -102,23 +102,6 @@ class LinkService {
         },
       })
       .promise();
-
-    //notifying user
-    await sqs.sendMessage({
-            MessageBody: "Link was deactivated",
-            MessageAttributes: {
-              link: {
-                DataType: "String",
-                StringValue: data.Item.short_link,
-              },
-              owner_email: {
-                DataType: "String",
-                StringValue: data.Item.owner_email,
-              }
-            },
-        QueueUrl: `${process.env.SQS_URL}/notifications`,
-      })
-      .promise();
   }
 
   async getLinksByEmail(email: string) {

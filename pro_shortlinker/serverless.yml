@@ -75,10 +75,6 @@ functions:
           arn: 
             Fn::GetAtt: [NotificationsQueue, Arn]
           batchSize: 10
-  # notifications-listener:
-  #   handler: build/functions/notifications-listener.handler
-  #   events:
-  #     - schedule: rate(2 minutes)
 
 resources:
   Resources:
