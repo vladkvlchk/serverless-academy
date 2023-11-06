@@ -1,5 +1,4 @@
-import dynamodb from "../db";
-import { LinkModelType } from "../types";
+import { dynamodb, sqs } from "../aws";
 
 class LinkService {
   async addLink(
@@ -7,7 +6,8 @@ class LinkService {
     active_time: string,
     owner_email: string
   ) {
-    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; //length - 62 ( sorted by chars.split('').sort().join(''); )
+    const chars =
+      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; //length - 62 ( sorted by chars.split('').sort().join(''); )
     let id = ""; //this will be short path
 
     const data = await dynamodb.scan({ TableName: "Links" }).promise();
@@ -48,15 +48,15 @@ class LinkService {
     }
 
     //calculation expiration time
-    let expiration_time : number | string = Date.now();
-    if(active_time === '1 day'){
-        expiration_time += 1000 * 60 * 60 * 24
-    } else if (active_time === '3 days'){
-        expiration_time += 1000 * 60 * 60 * 24 * 3
-    } else if (active_time === '5 days'){
-        expiration_time += 1000 * 60 * 60 * 24 * 5
-    } else if (active_time === 'one-time'){
-        expiration_time = 'one-time'
+    let expiration_time: number | string = Date.now();
+    if (active_time === "1 day") {
+      expiration_time += 1000 * 60 * 60 * 24;
+    } else if (active_time === "3 days") {
+      expiration_time += 1000 * 60 * 60 * 24 * 3;
+    } else if (active_time === "5 days") {
+      expiration_time += 1000 * 60 * 60 * 24 * 5;
+    } else if (active_time === "one-time") {
+      expiration_time = "one-time";
     }
 
     //assembling data
@@ -79,13 +79,15 @@ class LinkService {
 
   async removeLink(id: string, owner_email: string): Promise<void> {
     //checking if user own the link
-    const data = await dynamodb.get({
+    const data = await dynamodb
+      .get({
         TableName: "Links",
         Key: {
-            id,
-            owner_email
-        }
-    }).promise();
+          id,
+          owner_email,
+        },
+      })
+      .promise();
     if (!data.Item) {
       throw new Error("Link is not found");
     }
@@ -96,8 +98,25 @@ class LinkService {
         TableName: "Links",
         Key: {
           id,
-          owner_email
+          owner_email,
         },
+      })
+      .promise();
+
+    //notifying user
+    await sqs.sendMessage({
+            MessageBody: "Link was deactivated",
+            MessageAttributes: {
+              link: {
+                DataType: "String",
+                StringValue: data.Item.short_link,
+              },
+              owner_email: {
+                DataType: "String",
+                StringValue: data.Item.owner_email,
+              }
+            },
+        QueueUrl: `${process.env.SQS_URL}/notifications`,
       })
       .promise();
   }
@@ -112,26 +131,26 @@ class LinkService {
         },
       })
       .promise();
-    
-    return data.Items.map(item => ({
-        id: item.id,
-        original_link: item.original_link,
-        expiration_time: item.expiration_time,
-        short_link: item.short_link,
-    }))
+
+    return data.Items.map((item) => ({
+      id: item.id,
+      original_link: item.original_link,
+      expiration_time: item.expiration_time,
+      short_link: item.short_link,
+    }));
   }
 
-  async getLinkById(id: string){
-    const data = await dynamodb.scan({TableName: "Links"}).promise();
-    const link = data.Items.find(item => item.id === id);
-    if(!link){
-        throw new Error("Link is not found")
+  async getLinkById(id: string) {
+    const data = await dynamodb.scan({ TableName: "Links" }).promise();
+    const link = data.Items.find((item) => item.id === id);
+    if (!link) {
+      throw new Error("Link is not found");
     }
 
-    if(link.expiration_time === 'one-time'){
-        await this.removeLink(link.id, link.owner_email)
+    if (link.expiration_time === "one-time") {
+      await this.removeLink(link.id, link.owner_email);
     }
-    return link.original_link
+    return link.original_link;
   }
 }
 

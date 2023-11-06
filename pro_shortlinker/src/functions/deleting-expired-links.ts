@@ -1,4 +1,4 @@
-import dynamodb from "../db";
+import { dynamodb } from "../aws";
 
 export const handler = async () => {
   try {

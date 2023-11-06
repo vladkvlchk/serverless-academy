@@ -3,9 +3,6 @@ app: shortlinker
 service: shortlinker
 frameworkVersion: "3"
 
-custom:
-  tableName: "users-table-${sls:stage}"
-
 provider:
   name: aws
   runtime: nodejs18.x
@@ -23,21 +20,25 @@ provider:
           Resource:
             - Fn::GetAtt: [UsersTable, Arn]
             - Fn::GetAtt: [LinksTable, Arn]
-  environment:
-    USERS_TABLE: ${self:custom.tableName}
+        - Effect: Allow
+          Action:
+            - ses:SendEmail
+            - sqs:SendMessage
+            - sqs:SendMessageBatch
+          Resource: "*"
 
 functions:
   sign-up:
     handler: build/functions/sign-up.handler
     events:
       - http:
-          path: serverlessSetup/auth/sign-up
+          path: auth/sign-up
           method: post
   sign-in:
     handler: build/functions/sign-in.handler
     events:
       - http:
-          path: serverlessSetup/auth/sign-in
+          path: auth/sign-in
           method: post
   create-link:
     handler: build/functions/create-link.handler
@@ -67,6 +68,17 @@ functions:
     handler: build/functions/deleting-expired-links.handler
     events:
       - schedule: rate(5 minutes)
+  send-notifications:
+    handler: build/functions/send-notifications.handler
+    events:
+      - sqs: 
+          arn: 
+            Fn::GetAtt: [NotificationsQueue, Arn]
+          batchSize: 10
+  # notifications-listener:
+  #   handler: build/functions/notifications-listener.handler
+  #   events:
+  #     - schedule: rate(2 minutes)
 
 resources:
   Resources:
@@ -96,6 +108,14 @@ resources:
           - AttributeName: owner_email
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
+    NotificationsQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: notifications
+        ReceiveMessageWaitTimeSeconds: 20
+        MessageRetentionPeriod: 1209600
+        VisibilityTimeout: 60
+
 
 plugins:
   - serverless-dotenv-plugin

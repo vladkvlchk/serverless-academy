@@ -1,7 +1,6 @@
 import * as bcryptjs from "bcryptjs";
-import * as jwt from "jsonwebtoken";
 
-import dynamodb from "../db";
+import { dynamodb } from "../aws";
 import { TokensType } from "../types";
 import tokenService from "./token-service";
 
