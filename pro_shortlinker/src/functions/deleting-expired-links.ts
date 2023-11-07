@@ -32,16 +32,16 @@ export const handler = async () => {
         expired_links = expired_links.slice(10);
       }
 
-      console.log(JSON.stringify(batches_10))
+      console.log(JSON.stringify(batches_10));
 
       batches_10.forEach(async (links) => {
-        console.log('process...', links)
+        console.log("process...", links);
         const Entries = links.map((item) => ({
           Id: item.id,
           MessageBody: JSON.stringify(item),
         }));
 
-        console.log('Entries: ', Entries);
+        console.log("Entries: ", Entries);
 
         await sqs
           .sendMessageBatch({
@@ -49,7 +49,7 @@ export const handler = async () => {
             QueueUrl: `${process.env.SQS_URL}/notifications`,
           })
           .promise();
-        console.log('happy end!');
+        console.log("happy end!");
       });
     }
 

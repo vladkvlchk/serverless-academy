@@ -29,37 +29,37 @@ provider:
 
 functions:
   sign-up:
-    handler: build/functions/sign-up.handler
+    handler: build/functions/http/auth/sign-up.handler
     events:
       - http:
           path: auth/sign-up
           method: post
   sign-in:
-    handler: build/functions/sign-in.handler
+    handler: build/functions/http/auth/sign-in.handler
     events:
       - http:
           path: auth/sign-in
           method: post
   create-link:
-    handler: build/functions/create-link.handler
+    handler: build/functions/http/link/create-link.handler
     events:
       - http:
           path: link/create
           method: post
   deactivate-link:
-    handler: build/functions/deactivate-link.handler
+    handler: build/functions/http/link/deactivate-link.handler
     events:
       - http:
           path: link/deactivate
           method: post
   links-by-user:
-    handler: build/functions/links-by-user.handler
+    handler: build/functions/http/link/links-by-user.handler
     events:
       - http:
           path: my-links
           method: get
   redirect:
-    handler: build/functions/redirect.handler
+    handler: build/functions/http/redirect.handler
     events:
       - http:
           path: /{id}

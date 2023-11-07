@@ -181,8 +181,8 @@
     },
     "/link/deactivate": {
       "post": {
-        "summary": "Create a new short link",
-        "operationId": "createLink",
+        "summary": "Deactivate user link",
+        "operationId": "deactivateLink",
         "parameters": [
           {
             "name": "accessToken",
@@ -210,7 +210,7 @@
           },
           "responses": {
             "200": {
-              "description": "Short link created successfully",
+              "description": "Short link deactivated successfully",
               "content": {
                 "application/json": {
                   "schema": {
@@ -230,8 +230,8 @@
     },
     "/my-links": {
       "get": {
-        "summary": "Create a new short link",
-        "operationId": "createLink",
+        "summary": "Get all user links",
+        "operationId": "getMyLinks",
         "parameters": [
           {
             "name": "accessToken",

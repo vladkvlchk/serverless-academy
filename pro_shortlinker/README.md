@@ -1,4 +1,4 @@
-**Pro Shortlinker App**
+# Pro Shortlinker App
 
 **Requirements**
 
@@ -9,11 +9,13 @@ To follow these instructions, you will need:
 
 **Preparing**
 
-Before you deploy, download /node_modules:
+1. Before you deploy, download /node_modules:
 
 ```
 npm install
 ```
+
+2. Create `.env` file using `.env.example`
 
 **Building the App**
 
@@ -37,3 +39,21 @@ This command will deploy the app to AWS.
 **Conclusion**
 
 For more information, visit the Serverless Framework documentation: https://www.serverless.com/framework/docs/.
+------------------------------------------------------
+
+
+## Folder structure
+
+`/functions` - includes all lambda functions of the project. Here are all entrypoints of each process
+`/services` - contains classes that are in charge of business logic
+`/types` - exports custom types for typescript
+`/validation` - functions app uses for validation
+
+`/build` - built app version
+
+**Files**
+`src/aws.ts` - AWS classes (dynamoDB, SQS, SES)
+`OpenAPI.json` - OpenAPI specification
+
+
+
