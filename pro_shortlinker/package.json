@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "node esbuild.config.js",
-    "start": "node esbuild.config.js && node ./build/index.js",
-    "start:dev": "nodemon --watch 'src/**/*.ts' --exec 'npm start'"
+    "build": "node esbuild.config.js"
   },
   "keywords": [],
   "author": "",
