@@ -8,8 +8,7 @@ export const handler = async (event: SQSEvent) => {
     console.log(messages_arr.length, messages_arr);
 
     const messages_map = new Map();
-    await messages_arr.forEach((message) => {
-      //@ts-ignore
+    messages_arr.forEach((message) => {
       if (messages_map.get(message.owner_email)) {
         messages_map.set(message.owner_email, [
           ...messages_map.get(message.owner_email),
@@ -20,19 +19,16 @@ export const handler = async (event: SQSEvent) => {
       }
     });
 
-    console.log(messages_map);
-
-    await messages_map.forEach(async (value, key, map) => {
-
+    const promises = [];
+    const send_email = async (email, links) => {
       const params = {
         Destination: {
-          ToAddresses: [value.owner_email],
+          ToAddresses: [email],
         },
         Message: {
           Body: {
             Text: {
-              Data: value
-              //@ts-ignore
+              Data: links
                 .map((link) => `Your link ${link.short_link} was deactivated`)
                 .join("\n"),
             },
@@ -43,9 +39,17 @@ export const handler = async (event: SQSEvent) => {
         },
         Source: process.env.SENDER_EMAIL,
       };
+      const res = await ses.sendEmail(params).promise();
+      console.log(res);
+    };
 
-      await ses.sendEmail(params).promise();
-    })
+    messages_map.forEach((value, key) => {
+      promises.push(send_email(key, value));
+    });
+
+    await Promise.all(promises);
+    console.log("that is it");
+
     return {
       statusCode: 200,
       body: JSON.stringify({ message: "emails are sended successfully" }),

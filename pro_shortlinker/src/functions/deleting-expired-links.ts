@@ -41,15 +41,13 @@ export const handler = async () => {
           MessageBody: JSON.stringify(item),
         }));
 
-        console.log("Entries: ", Entries);
-
-        await sqs
+        const res = await sqs
           .sendMessageBatch({
             Entries,
             QueueUrl: `${process.env.SQS_URL}/notifications`,
           })
           .promise();
-        console.log("happy end!");
+        console.log(res);
       });
     }
 

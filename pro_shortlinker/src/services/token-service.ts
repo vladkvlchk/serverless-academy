@@ -10,8 +10,8 @@ class TokenService {
     return { accessToken, refreshToken };
   }
 
-  verifyAccessToken(token : string) : string | jwt.JwtPayload{
-    const payload = jwt.verify(token, process.env.ACCESS_KEY);
+  verifyAccessToken(token : string) : {email : string} {
+    const payload = jwt.verify(token, process.env.ACCESS_KEY) as {email: string};
     return payload
   }
 
@@ -21,8 +21,8 @@ class TokenService {
     }
     const bearer = bearerHeader.split(" ");
     const bearerToken = bearer[1];
-    //@ts-ignore
-    const payload : { email: string } = this.verifyAccessToken(bearerToken);
+
+    const payload = this.verifyAccessToken(bearerToken);
     if(!payload || !payload.email){
         throw new Error("Token error")
     }

@@ -132,7 +132,17 @@ class LinkService {
 
     if (link.expiration_time === "one-time") {
       await this.removeLink(link.id, link.owner_email);
+      await sqs
+          .sendMessageBatch({
+            Entries: [{
+                Id: link.id,
+                MessageBody: JSON.stringify(link)
+            }],
+            QueueUrl: `${process.env.SQS_URL}/notifications`,
+          })
+          .promise();
     }
+
     return link.original_link;
   }
 }

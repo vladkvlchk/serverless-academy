@@ -67,7 +67,7 @@ functions:
   deleting-expired-links:
     handler: build/functions/deleting-expired-links.handler
     events:
-      - schedule: rate(5 minutes)
+      - schedule: rate(2 minutes)
   send-emails:
     handler: build/functions/send-emails.handler
     events:

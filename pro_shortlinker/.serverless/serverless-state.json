@@ -174,10 +174,10 @@
               "LogGroupName": "/aws/lambda/shortlinker-dev-deleting-expired-links"
             }
           },
-          "SendDashemailsLogGroup": {
+          "SendDashemails2LogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/shortlinker-dev-send-emails"
+              "LogGroupName": "/aws/lambda/shortlinker-dev-send-emails2"
             }
           },
           "IamRoleLambdaExecution": {
@@ -356,7 +356,7 @@
                           },
                           {
                             "Fn::GetAtt": [
-                              "SendDashemailsLogGroup",
+                              "SendDashemails2LogGroup",
                               "Arn"
                             ]
                           }
@@ -375,7 +375,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/shortlinker/dev/1699361457589-2023-11-07T12:50:57.589Z/shortlinker.zip"
+                "S3Key": "serverless/shortlinker/dev/1699378590435-2023-11-07T17:36:30.435Z/shortlinker.zip"
               },
               "Handler": "s_sign_up.handler",
               "Runtime": "nodejs18.x",
@@ -411,7 +411,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/shortlinker/dev/1699361457589-2023-11-07T12:50:57.589Z/shortlinker.zip"
+                "S3Key": "serverless/shortlinker/dev/1699378590435-2023-11-07T17:36:30.435Z/shortlinker.zip"
               },
               "Handler": "s_sign_in.handler",
               "Runtime": "nodejs18.x",
@@ -447,7 +447,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/shortlinker/dev/1699361457589-2023-11-07T12:50:57.589Z/shortlinker.zip"
+                "S3Key": "serverless/shortlinker/dev/1699378590435-2023-11-07T17:36:30.435Z/shortlinker.zip"
               },
               "Handler": "s_create_link.handler",
               "Runtime": "nodejs18.x",
@@ -483,7 +483,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/shortlinker/dev/1699361457589-2023-11-07T12:50:57.589Z/shortlinker.zip"
+                "S3Key": "serverless/shortlinker/dev/1699378590435-2023-11-07T17:36:30.435Z/shortlinker.zip"
               },
               "Handler": "s_deactivate_link.handler",
               "Runtime": "nodejs18.x",
@@ -519,7 +519,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/shortlinker/dev/1699361457589-2023-11-07T12:50:57.589Z/shortlinker.zip"
+                "S3Key": "serverless/shortlinker/dev/1699378590435-2023-11-07T17:36:30.435Z/shortlinker.zip"
               },
               "Handler": "s_links_by_user.handler",
               "Runtime": "nodejs18.x",
@@ -555,7 +555,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/shortlinker/dev/1699361457589-2023-11-07T12:50:57.589Z/shortlinker.zip"
+                "S3Key": "serverless/shortlinker/dev/1699378590435-2023-11-07T17:36:30.435Z/shortlinker.zip"
               },
               "Handler": "s_redirect.handler",
               "Runtime": "nodejs18.x",
@@ -591,7 +591,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/shortlinker/dev/1699361457589-2023-11-07T12:50:57.589Z/shortlinker.zip"
+                "S3Key": "serverless/shortlinker/dev/1699378590435-2023-11-07T17:36:30.435Z/shortlinker.zip"
               },
               "Handler": "s_deleting_expired_links.handler",
               "Runtime": "nodejs18.x",
@@ -620,18 +620,18 @@
               "DeletingDashexpiredDashlinksLogGroup"
             ]
           },
-          "SendDashemailsLambdaFunction": {
+          "SendDashemails2LambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/shortlinker/dev/1699361457589-2023-11-07T12:50:57.589Z/shortlinker.zip"
+                "S3Key": "serverless/shortlinker/dev/1699378590435-2023-11-07T17:36:30.435Z/shortlinker.zip"
               },
-              "Handler": "s_send_emails.handler",
+              "Handler": "s_send_emails2.handler",
               "Runtime": "nodejs18.x",
-              "FunctionName": "shortlinker-dev-send-emails",
+              "FunctionName": "shortlinker-dev-send-emails2",
               "MemorySize": 1024,
               "Timeout": 6,
               "Environment": {
@@ -653,93 +653,93 @@
               }
             },
             "DependsOn": [
-              "SendDashemailsLogGroup"
+              "SendDashemails2LogGroup"
             ]
           },
-          "SignDashupLambdaVersion9wBbrIbnyFDDeVfsO0ikZ0krKqAjNpmGtN00Crg": {
+          "SignDashupLambdaVersionr9kN6zaBdAi3QgF8ZbyymneCMTVQjzn5xSOQ3pCk0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "SignDashupLambdaFunction"
               },
-              "CodeSha256": "8ZFibI2C7OH2CMqmagmQ+7FwH7edwp3wfWBA2KvDOyw="
+              "CodeSha256": "aPOv/swu0N8IHemW1c9or9lR9ouqPzLCDsH9O7braWc="
             }
           },
-          "SignDashinLambdaVersiont9s7SzfeVVhaHVxqkSW18jeiymdaAe1JXfl56isFDc": {
+          "SignDashinLambdaVersion8N9V1jOtDgOQhfM0BnLXxwqK5bKLSfqyRImG7nUzh0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "SignDashinLambdaFunction"
               },
-              "CodeSha256": "8ZFibI2C7OH2CMqmagmQ+7FwH7edwp3wfWBA2KvDOyw="
+              "CodeSha256": "aPOv/swu0N8IHemW1c9or9lR9ouqPzLCDsH9O7braWc="
             }
           },
-          "CreateDashlinkLambdaVersionfOgQd01Nd7o1MhOKgwE0CbmjUju8s3LpVEX3XHeYpE": {
+          "CreateDashlinkLambdaVersionBFg13mtiGUotZSxCIcwr4onOCv3PiN0peXYDhVP1w": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateDashlinkLambdaFunction"
               },
-              "CodeSha256": "8ZFibI2C7OH2CMqmagmQ+7FwH7edwp3wfWBA2KvDOyw="
+              "CodeSha256": "aPOv/swu0N8IHemW1c9or9lR9ouqPzLCDsH9O7braWc="
             }
           },
-          "DeactivateDashlinkLambdaVersionjhLw15dF6n65AFp8YeW9qNLd4tw1DgnpcmuPbWYuFIU": {
+          "DeactivateDashlinkLambdaVersionFCJ0BXEhIlGDmDNilq1XoT0xxChhQIcaBinLfHJhyqc": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "DeactivateDashlinkLambdaFunction"
               },
-              "CodeSha256": "8ZFibI2C7OH2CMqmagmQ+7FwH7edwp3wfWBA2KvDOyw="
+              "CodeSha256": "aPOv/swu0N8IHemW1c9or9lR9ouqPzLCDsH9O7braWc="
             }
           },
-          "LinksDashbyDashuserLambdaVersionFs58e5bxrZcLA0LMbvQsb7suIBsLeUS32usvF26o": {
+          "LinksDashbyDashuserLambdaVersiongTGvw2iE7ksH0uUkVeibnsmRn0kRvrrmW9bG6ocYR4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "LinksDashbyDashuserLambdaFunction"
               },
-              "CodeSha256": "8ZFibI2C7OH2CMqmagmQ+7FwH7edwp3wfWBA2KvDOyw="
+              "CodeSha256": "aPOv/swu0N8IHemW1c9or9lR9ouqPzLCDsH9O7braWc="
             }
           },
-          "RedirectLambdaVersion8H3Z32P3kzYXEGYrPvO4YHNbegW0uHApPdAoCsfJSU": {
+          "RedirectLambdaVersionPcoSzqZ6hLsOPRkjpI0TxUW5vXQ9S3xbkrz8BF8qTFE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "RedirectLambdaFunction"
               },
-              "CodeSha256": "8ZFibI2C7OH2CMqmagmQ+7FwH7edwp3wfWBA2KvDOyw="
+              "CodeSha256": "aPOv/swu0N8IHemW1c9or9lR9ouqPzLCDsH9O7braWc="
             }
           },
-          "DeletingDashexpiredDashlinksLambdaVersion8e1AyYQ16o2BijSnRTlg4JE1CMaa2cbfG1aWbcf4qA": {
+          "DeletingDashexpiredDashlinksLambdaVersionKGUA6EgMX24JbmLqYD3K0XUXxFfXxHgyX7FcNAOLaY": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "DeletingDashexpiredDashlinksLambdaFunction"
               },
-              "CodeSha256": "8ZFibI2C7OH2CMqmagmQ+7FwH7edwp3wfWBA2KvDOyw="
+              "CodeSha256": "aPOv/swu0N8IHemW1c9or9lR9ouqPzLCDsH9O7braWc="
             }
           },
-          "SendDashemailsLambdaVersionpAUcRaIJz5Hv7JRxS3O00lJHB6c2xYAZlCk27iV8M": {
+          "SendDashemails2LambdaVersionPPfwDcIgSzJsxavPAvGgBYxn5uznrR9s9nOjCNJorA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
-                "Ref": "SendDashemailsLambdaFunction"
+                "Ref": "SendDashemails2LambdaFunction"
               },
-              "CodeSha256": "8ZFibI2C7OH2CMqmagmQ+7FwH7edwp3wfWBA2KvDOyw="
+              "CodeSha256": "aPOv/swu0N8IHemW1c9or9lR9ouqPzLCDsH9O7braWc="
             }
           },
           "DeletingDashexpiredDashlinksEventsRuleSchedule1": {
             "Type": "AWS::Events::Rule",
             "Properties": {
-              "ScheduleExpression": "rate(5 minutes)",
+              "ScheduleExpression": "rate(2 minutes)",
               "State": "ENABLED",
               "Targets": [
                 {
@@ -1169,7 +1169,7 @@
               "RedirectLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1699361433772": {
+          "ApiGatewayDeployment1699378540824": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -1517,7 +1517,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/shortlinker/dev/1699361457589-2023-11-07T12:50:57.589Z/custom-resources.zip"
+                "S3Key": "serverless/shortlinker/dev/1699378590435-2023-11-07T17:36:30.435Z/custom-resources.zip"
               },
               "FunctionName": "shortlinker-dev-custom-resource-apigw-cw-role",
               "Handler": "api-gateway-cloud-watch-role/handler.handler",
@@ -1535,7 +1535,7 @@
               "IamRoleCustomResourcesLambdaExecution"
             ]
           },
-          "SendDashemailsEventSourceMappingSQSNotificationsQueue": {
+          "SendDashemails2EventSourceMappingSQSNotificationsQueue": {
             "Type": "AWS::Lambda::EventSourceMapping",
             "DependsOn": [
               "IamRoleLambdaExecution"
@@ -1550,7 +1550,7 @@
               },
               "FunctionName": {
                 "Fn::GetAtt": [
-                  "SendDashemailsLambdaFunction",
+                  "SendDashemails2LambdaFunction",
                   "Arn"
                 ]
               },
@@ -1636,7 +1636,7 @@
           "SignDashupLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "SignDashupLambdaVersion9wBbrIbnyFDDeVfsO0ikZ0krKqAjNpmGtN00Crg"
+              "Ref": "SignDashupLambdaVersionr9kN6zaBdAi3QgF8ZbyymneCMTVQjzn5xSOQ3pCk0"
             },
             "Export": {
               "Name": "sls-shortlinker-dev-SignDashupLambdaFunctionQualifiedArn"
@@ -1645,7 +1645,7 @@
           "SignDashinLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "SignDashinLambdaVersiont9s7SzfeVVhaHVxqkSW18jeiymdaAe1JXfl56isFDc"
+              "Ref": "SignDashinLambdaVersion8N9V1jOtDgOQhfM0BnLXxwqK5bKLSfqyRImG7nUzh0"
             },
             "Export": {
               "Name": "sls-shortlinker-dev-SignDashinLambdaFunctionQualifiedArn"
@@ -1654,7 +1654,7 @@
           "CreateDashlinkLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateDashlinkLambdaVersionfOgQd01Nd7o1MhOKgwE0CbmjUju8s3LpVEX3XHeYpE"
+              "Ref": "CreateDashlinkLambdaVersionBFg13mtiGUotZSxCIcwr4onOCv3PiN0peXYDhVP1w"
             },
             "Export": {
               "Name": "sls-shortlinker-dev-CreateDashlinkLambdaFunctionQualifiedArn"
@@ -1663,7 +1663,7 @@
           "DeactivateDashlinkLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "DeactivateDashlinkLambdaVersionjhLw15dF6n65AFp8YeW9qNLd4tw1DgnpcmuPbWYuFIU"
+              "Ref": "DeactivateDashlinkLambdaVersionFCJ0BXEhIlGDmDNilq1XoT0xxChhQIcaBinLfHJhyqc"
             },
             "Export": {
               "Name": "sls-shortlinker-dev-DeactivateDashlinkLambdaFunctionQualifiedArn"
@@ -1672,7 +1672,7 @@
           "LinksDashbyDashuserLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "LinksDashbyDashuserLambdaVersionFs58e5bxrZcLA0LMbvQsb7suIBsLeUS32usvF26o"
+              "Ref": "LinksDashbyDashuserLambdaVersiongTGvw2iE7ksH0uUkVeibnsmRn0kRvrrmW9bG6ocYR4"
             },
             "Export": {
               "Name": "sls-shortlinker-dev-LinksDashbyDashuserLambdaFunctionQualifiedArn"
@@ -1681,7 +1681,7 @@
           "RedirectLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "RedirectLambdaVersion8H3Z32P3kzYXEGYrPvO4YHNbegW0uHApPdAoCsfJSU"
+              "Ref": "RedirectLambdaVersionPcoSzqZ6hLsOPRkjpI0TxUW5vXQ9S3xbkrz8BF8qTFE"
             },
             "Export": {
               "Name": "sls-shortlinker-dev-RedirectLambdaFunctionQualifiedArn"
@@ -1690,19 +1690,19 @@
           "DeletingDashexpiredDashlinksLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "DeletingDashexpiredDashlinksLambdaVersion8e1AyYQ16o2BijSnRTlg4JE1CMaa2cbfG1aWbcf4qA"
+              "Ref": "DeletingDashexpiredDashlinksLambdaVersionKGUA6EgMX24JbmLqYD3K0XUXxFfXxHgyX7FcNAOLaY"
             },
             "Export": {
               "Name": "sls-shortlinker-dev-DeletingDashexpiredDashlinksLambdaFunctionQualifiedArn"
             }
           },
-          "SendDashemailsLambdaFunctionQualifiedArn": {
+          "SendDashemails2LambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "SendDashemailsLambdaVersionpAUcRaIJz5Hv7JRxS3O00lJHB6c2xYAZlCk27iV8M"
+              "Ref": "SendDashemails2LambdaVersionPPfwDcIgSzJsxavPAvGgBYxn5uznrR9s9nOjCNJorA"
             },
             "Export": {
-              "Name": "sls-shortlinker-dev-SendDashemailsLambdaFunctionQualifiedArn"
+              "Name": "sls-shortlinker-dev-SendDashemails2LambdaFunctionQualifiedArn"
             }
           },
           "ServiceEndpoint": {
@@ -1844,7 +1844,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "SignDashupLambdaVersion9wBbrIbnyFDDeVfsO0ikZ0krKqAjNpmGtN00Crg"
+        "versionLogicalId": "SignDashupLambdaVersionr9kN6zaBdAi3QgF8ZbyymneCMTVQjzn5xSOQ3pCk0"
       },
       "sign-in": {
         "handler": "s_sign_in.handler",
@@ -1863,7 +1863,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "SignDashinLambdaVersiont9s7SzfeVVhaHVxqkSW18jeiymdaAe1JXfl56isFDc"
+        "versionLogicalId": "SignDashinLambdaVersion8N9V1jOtDgOQhfM0BnLXxwqK5bKLSfqyRImG7nUzh0"
       },
       "create-link": {
         "handler": "s_create_link.handler",
@@ -1882,7 +1882,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "CreateDashlinkLambdaVersionfOgQd01Nd7o1MhOKgwE0CbmjUju8s3LpVEX3XHeYpE"
+        "versionLogicalId": "CreateDashlinkLambdaVersionBFg13mtiGUotZSxCIcwr4onOCv3PiN0peXYDhVP1w"
       },
       "deactivate-link": {
         "handler": "s_deactivate_link.handler",
@@ -1901,7 +1901,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "DeactivateDashlinkLambdaVersionjhLw15dF6n65AFp8YeW9qNLd4tw1DgnpcmuPbWYuFIU"
+        "versionLogicalId": "DeactivateDashlinkLambdaVersionFCJ0BXEhIlGDmDNilq1XoT0xxChhQIcaBinLfHJhyqc"
       },
       "links-by-user": {
         "handler": "s_links_by_user.handler",
@@ -1920,7 +1920,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "LinksDashbyDashuserLambdaVersionFs58e5bxrZcLA0LMbvQsb7suIBsLeUS32usvF26o"
+        "versionLogicalId": "LinksDashbyDashuserLambdaVersiongTGvw2iE7ksH0uUkVeibnsmRn0kRvrrmW9bG6ocYR4"
       },
       "redirect": {
         "handler": "s_redirect.handler",
@@ -1939,13 +1939,13 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "RedirectLambdaVersion8H3Z32P3kzYXEGYrPvO4YHNbegW0uHApPdAoCsfJSU"
+        "versionLogicalId": "RedirectLambdaVersionPcoSzqZ6hLsOPRkjpI0TxUW5vXQ9S3xbkrz8BF8qTFE"
       },
       "deleting-expired-links": {
         "handler": "s_deleting_expired_links.handler",
         "events": [
           {
-            "schedule": "rate(5 minutes)"
+            "schedule": "rate(2 minutes)"
           }
         ],
         "name": "shortlinker-dev-deleting-expired-links",
@@ -1954,10 +1954,10 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "DeletingDashexpiredDashlinksLambdaVersion8e1AyYQ16o2BijSnRTlg4JE1CMaa2cbfG1aWbcf4qA"
+        "versionLogicalId": "DeletingDashexpiredDashlinksLambdaVersionKGUA6EgMX24JbmLqYD3K0XUXxFfXxHgyX7FcNAOLaY"
       },
-      "send-emails": {
-        "handler": "s_send_emails.handler",
+      "send-emails2": {
+        "handler": "s_send_emails2.handler",
         "events": [
           {
             "sqs": {
@@ -1968,13 +1968,13 @@
             }
           }
         ],
-        "name": "shortlinker-dev-send-emails",
+        "name": "shortlinker-dev-send-emails2",
         "package": {},
         "memory": 1024,
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "SendDashemailsLambdaVersionpAUcRaIJz5Hv7JRxS3O00lJHB6c2xYAZlCk27iV8M"
+        "versionLogicalId": "SendDashemails2LambdaVersionPPfwDcIgSzJsxavPAvGgBYxn5uznrR9s9nOjCNJorA"
       }
     },
     "resources": {
@@ -2067,7 +2067,7 @@
     "artifact": "/Users/vlad/Documents/projects/serverless-academy/pro_shortlinker/.serverless/shortlinker.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/shortlinker/dev/1699361457589-2023-11-07T12:50:57.589Z",
+    "artifactDirectoryName": "serverless/shortlinker/dev/1699378590435-2023-11-07T17:36:30.435Z",
     "artifact": "shortlinker.zip"
   }
 }
