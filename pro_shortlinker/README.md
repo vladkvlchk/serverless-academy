@@ -44,9 +44,12 @@ For more information, visit the Serverless Framework documentation: https://www.
 
 ## Folder structure
 
-`/functions` - includes all lambda functions of the project. Here are all entrypoints of each process \n
+`/functions` - includes all lambda functions of the project. Here are all entrypoints of each process
+
 `/services` - contains classes that are in charge of business logic
+
 `/types` - exports custom types for typescript
+
 `/validation` - functions app uses for validation
 
 `/build` - built app version
