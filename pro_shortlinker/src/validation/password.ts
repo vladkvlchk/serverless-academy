@@ -1,6 +1,8 @@
+import CustomError from "../exceptions/custom-error"
+
 function checkPassword(password: string): void {
   if (password.length < 8) {
-    throw new Error( "Validation error: password length must be at least 8 characters");
+    CustomError.throwError(400, "Validation error: password length must be at least 8 characters");
   }
 }
 

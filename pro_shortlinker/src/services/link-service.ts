@@ -1,4 +1,5 @@
 import { dynamodb, sqs } from "../aws";
+import CustomError from "../exceptions/custom-error";
 
 class LinkService {
   async addLink(
@@ -127,20 +128,22 @@ class LinkService {
     const data = await dynamodb.scan({ TableName: "Links" }).promise();
     const link = data.Items.find((item) => item.id === id);
     if (!link) {
-      throw new Error("Link is not found");
+      CustomError.throwError(404, "Not found");
     }
 
     if (link.expiration_time === "one-time") {
       await this.removeLink(link.id, link.owner_email);
       await sqs
-          .sendMessageBatch({
-            Entries: [{
-                Id: link.id,
-                MessageBody: JSON.stringify(link)
-            }],
-            QueueUrl: `${process.env.SQS_URL}/notifications`,
-          })
-          .promise();
+        .sendMessageBatch({
+          Entries: [
+            {
+              Id: link.id,
+              MessageBody: JSON.stringify(link),
+            },
+          ],
+          QueueUrl: `${process.env.SQS_URL}/notifications`,
+        })
+        .promise();
     }
 
     return link.original_link;

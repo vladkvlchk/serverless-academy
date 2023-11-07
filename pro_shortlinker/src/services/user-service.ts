@@ -3,11 +3,12 @@ import * as bcryptjs from "bcryptjs";
 import { dynamodb } from "../aws";
 import { TokensType } from "../types";
 import tokenService from "./token-service";
+import CustomError from "../exceptions/custom-error";
 
 class UserService {
   async registration(email: string, password: string): Promise<TokensType> {
     //checking if the user already exists
-    await dynamodb.get(
+    dynamodb.get(
       {
         TableName: "Users",
         Key: {
@@ -15,10 +16,8 @@ class UserService {
         },
       },
       (err, data) => {
-        if (err) throw new Error("DB error: cannot read the table");
-
         if (data.Item) {
-          throw new Error("User with this email is already registered");
+          CustomError.throwError(409, "User already exists");
         }
       }
     );
@@ -45,24 +44,30 @@ class UserService {
 
   async logIn(email: string, password: string): Promise<TokensType> {
     //getting user with the email
-    const data = await dynamodb.get({
-      TableName: "Users",
-      Key: {
-        email,
-      },
-    }).promise();
+    const data = await dynamodb
+      .get({
+        TableName: "Users",
+        Key: {
+          email,
+        },
+      })
+      .promise();
 
     //checking if the user exist
-    if(!data.Item){
-        throw new Error("User isn\'t found")   
+    if (!data.Item) {
+      CustomError.throwError(401, "Incorrect email or password");
     }
-    
+
     //checking if the password is correct
     const isPassEquals = await bcryptjs.compare(password, data.Item.password);
-    if (!isPassEquals) throw new Error("Incorrect password");
+    if (!isPassEquals) {
+      CustomError.throwError(401, "Incorrect email or password");
+    }
 
     //generating tokens
-    const { accessToken, refreshToken } = tokenService.generateTokens({ email });
+    const { accessToken, refreshToken } = tokenService.generateTokens({
+      email,
+    });
 
     return { accessToken, refreshToken };
   }

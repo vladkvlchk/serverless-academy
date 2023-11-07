@@ -21,7 +21,7 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
     };
   } catch (error) {
     return {
-      statusCode: 500,
+      statusCode: error.status || 500,
       body: JSON.stringify({ error: error.message }), 
     };
   }

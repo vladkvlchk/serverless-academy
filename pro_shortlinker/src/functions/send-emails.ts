@@ -48,12 +48,6 @@ export const handler = async (event: SQSEvent) => {
     });
 
     await Promise.all(promises);
-    console.log("that is it");
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ message: "emails are sended successfully" }),
-    };
   } catch (err) {
     console.error(err.message);
   }

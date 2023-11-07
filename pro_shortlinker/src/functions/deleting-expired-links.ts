@@ -13,8 +13,8 @@ export const handler = async () => {
     );
 
     if (expired_links) {
+      //delete item
       for (const item of expired_links) {
-        //delete item
         const deleteParams = {
           TableName: "Links",
           Key: {
@@ -53,17 +53,7 @@ export const handler = async () => {
 
       await Promise.all(promises)
     }
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ message: "successfully deleted" }),
-    };
   } catch (error) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        error: "Item' deleting error: " + error.message,
-      }),
-    };
+    console.log(error.message)
   }
 };
