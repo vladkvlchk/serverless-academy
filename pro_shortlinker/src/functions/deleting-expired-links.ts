@@ -34,21 +34,24 @@ export const handler = async () => {
 
       console.log(JSON.stringify(batches_10));
 
+      const promises = []
+      const send_batch = async (Entries) => {
+        await sqs.sendMessageBatch({
+          Entries,
+          QueueUrl: `${process.env.SQS_URL}/notifications`
+        }).promise()
+      }
+
       batches_10.forEach(async (links) => {
-        console.log("process...", links);
         const Entries = links.map((item) => ({
           Id: item.id,
           MessageBody: JSON.stringify(item),
         }));
 
-        const res = await sqs
-          .sendMessageBatch({
-            Entries,
-            QueueUrl: `${process.env.SQS_URL}/notifications`,
-          })
-          .promise();
-        console.log(res);
+        promises.push(send_batch(Entries));
       });
+
+      await Promise.all(promises)
     }
 
     return {
