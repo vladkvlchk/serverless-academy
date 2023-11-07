@@ -38,7 +38,7 @@ export const handler = async (event: SQSEvent) => {
             },
           },
           Subject: {
-            Data: "Pro-shortlinker notifications 2.0",
+            Data: "Pro-shortlinker notifications",
           },
         },
         Source: process.env.SENDER_EMAIL,
