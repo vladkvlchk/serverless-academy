@@ -90,7 +90,7 @@ class LinkService {
       })
       .promise();
     if (!data.Item) {
-      throw new Error("Link is not found");
+      CustomError.throwError(404, "Not found");
     }
 
     //deleting item

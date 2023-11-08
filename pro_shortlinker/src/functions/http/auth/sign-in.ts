@@ -1,6 +1,7 @@
 import { APIGatewayEvent, APIGatewayProxyResult } from "aws-lambda";
 
 import userService from "../../../services/user-service";
+import CustomError from "../../../exceptions/custom-error";
 
 export const handler = async (
   event: APIGatewayEvent
@@ -8,6 +9,9 @@ export const handler = async (
   try {
     const body = JSON.parse(event.body);
     const { email, password } = body;
+    if(!email || !password){
+      CustomError.throwError(400, "Bad Request")
+    }
 
     const data = await userService.logIn(email, password)
 

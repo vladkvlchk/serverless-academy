@@ -1,13 +1,16 @@
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 
-import checkEmail from '../../../validation/email';
-import checkPassword from '../../../validation/password';
+import {checkEmail, checkPassword} from '../../../validation/';
 import userService from '../../../services/user-service';
+import CustomError from '../../../exceptions/custom-error';
 
 export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
   try {
     const body = JSON.parse(event.body);
     const { email, password } = body;
+    if(!email || !password){
+      CustomError.throwError(400, "Bad Request")
+    }
 
     //validation
     checkEmail(email);
@@ -22,7 +25,7 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
   } catch (error) {
     return {
       statusCode: error.status || 500,
-      body: JSON.stringify({ error: error.message }), 
+      body: JSON.stringify({ message: error.message }), 
     };
   }
 };

@@ -8,19 +8,17 @@ import CustomError from "../exceptions/custom-error";
 class UserService {
   async registration(email: string, password: string): Promise<TokensType> {
     //checking if the user already exists
-    dynamodb.get(
+    const data = await dynamodb.get(
       {
         TableName: "Users",
         Key: {
           email,
         },
-      },
-      (err, data) => {
-        if (data.Item) {
-          CustomError.throwError(409, "User already exists");
-        }
       }
-    );
+    ).promise();
+    if (data.Item) {
+        CustomError.throwError(409, "User already exists");
+    }
 
     //adding new user
     const hashedPassword = await bcryptjs.hash(password, 10);

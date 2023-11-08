@@ -18,7 +18,7 @@ export const handler = async (
   } catch (error) {
     return {
       statusCode: error.status || 500,
-      body: JSON.stringify({ error: error.message }),
+      body: JSON.stringify({ message : error.message }),
     };
   }
 };

@@ -295,7 +295,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "302": {
             "description": "Redirected to the original link"
           },
           "404": {

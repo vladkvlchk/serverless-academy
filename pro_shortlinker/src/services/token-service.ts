@@ -14,10 +14,14 @@ class TokenService {
   }
 
   verifyAccessToken(token: string): { email: string } {
-    const payload = jwt.verify(token, process.env.ACCESS_KEY) as {
-      email: string;
-    };
-    return payload;
+    try {
+      const payload = jwt.verify(token, process.env.ACCESS_KEY) as {
+        email: string;
+      };
+      return payload;
+    } catch (error) {
+      CustomError.throwError(401, "Unauthorized");
+    }
   }
 
   getEmailFromBearer(bearerHeader: string): string {
