@@ -67,7 +67,7 @@ functions:
   deleting-expired-links:
     handler: build/functions/deleting-expired-links.handler
     events:
-      - schedule: rate(2 minutes)
+      - schedule: rate(1 day)
   send-emails:
     handler: build/functions/send-emails.handler
     events:
@@ -115,3 +115,15 @@ resources:
 
 plugins:
   - serverless-dotenv-plugin
+  - serverless-esbuild
+
+custom:
+  esbuild:
+    entryPoints:
+      - './src/**/*.ts'
+    outputBuildFolder: './build'
+    bundle: true
+    minify: true
+    platform: "node"
+    sourcemap: true
+    target: "node18"
