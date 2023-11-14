@@ -23,7 +23,7 @@ export const handler = async (
     checkActiveTime(active_time);
     checkLink(link);
 
-    const response = await linkService.addLink(link, active_time, email);
+    const response = await linkService.create(link, active_time, email);
 
     return {
       statusCode: 200,

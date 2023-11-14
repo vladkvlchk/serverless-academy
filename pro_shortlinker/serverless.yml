@@ -17,9 +17,11 @@ provider:
             - dynamodb:PutItem
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
+            - dynamodb:BatchGetItem
           Resource:
             - Fn::GetAtt: [UsersTable, Arn]
             - Fn::GetAtt: [LinksTable, Arn]
+            - Fn::GetAtt: [AppValuesTable, Arn]
         - Effect: Allow
           Action:
             - ses:SendEmail
@@ -96,13 +98,20 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
-          - AttributeName: owner_email
-            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-          - AttributeName: owner_email
-            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+    AppValuesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: AppValues
+        AttributeDefinitions:
+          - AttributeName: key
+            AttributeType: S
+        KeySchema:
+          - AttributeName: key
+            KeyType: HASH
         BillingMode: PAY_PER_REQUEST
     NotificationsQueue:
       Type: "AWS::SQS::Queue"
@@ -117,13 +126,16 @@ plugins:
   - serverless-dotenv-plugin
   - serverless-esbuild
 
+
 custom:
   esbuild:
+    # config: './esbuild.config.js'
     entryPoints:
       - './src/**/*.ts'
-    outputBuildFolder: './build'
+    # outputBuildFolder: './'
     bundle: true
     minify: true
     platform: "node"
     sourcemap: true
     target: "node18"
+

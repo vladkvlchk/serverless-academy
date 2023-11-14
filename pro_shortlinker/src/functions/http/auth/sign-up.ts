@@ -6,21 +6,22 @@ import CustomError from '../../../exceptions/custom-error';
 
 export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
   try {
+    
     const body = JSON.parse(event.body);
     const { email, password } = body;
     if(!email || !password){
       CustomError.throwError(400, "Bad Request")
     }
-
+    
     //validation
     checkEmail(email);
     checkPassword(password);
 
-    const { accessToken, refreshToken } = await userService.registration(email, password);
+    const res = await userService.registration(email, password);
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ accessToken, refreshToken }), 
+      body: JSON.stringify(res), 
     };
   } catch (error) {
     return {

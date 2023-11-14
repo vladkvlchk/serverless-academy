@@ -1,8 +1,9 @@
-import { dynamodb, sqs } from "../aws";
+import { dynamodb } from "../aws";
 import CustomError from "../exceptions/custom-error";
+import { BatchExecuteStatementCommand, BatchGetCommand, GetCommand, PutCommand, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 
 class LinkService {
-  async addLink(
+  async create(
     original_link: string,
     active_time: string,
     owner_email: string
@@ -11,22 +12,14 @@ class LinkService {
       "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; //length - 62 ( sorted by chars.split('').sort().join(''); )
     let id = ""; //this will be short path
 
-    const data = await dynamodb.scan({ TableName: "Links" }).promise();
+    const data = await dynamodb.send(
+      new GetCommand({
+        TableName: "AppValues",
+        Key: { key: "last_created_link_id" },
+      })
+    );
 
-    const all_items = data.Items.sort((itemA, itemB) => {
-      if (itemA.id.length > itemB.id.length) {
-        return 1;
-      }
-      if (itemA.id.length < itemB.id.length) {
-        return -1;
-      } else {
-        return itemA.id > itemB.id ? 1 : -1;
-      }
-    });
-
-    const last_link_id = all_items.length
-      ? all_items[all_items.length - 1].id
-      : ""; //last booked link id
+    const last_link_id = data.Item ? data.Item.value : "";
 
     let flag = false; // this flag we use to know if we need to keep changing next chars (false - we need | true - we don't need)
     id = last_link_id
@@ -71,82 +64,144 @@ class LinkService {
         short_link,
         owner_email,
         expiration_time,
+        is_active: true,
       },
     };
-    await dynamodb.put(params).promise();
+
+    await dynamodb.send(new PutCommand(params));
+    if (data.Item) {
+      await dynamodb.send(
+        new UpdateCommand({
+          TableName: "AppValues",
+          Key: {
+            key: "last_created_link_id",
+          },
+          UpdateExpression: "SET #attrName = :new_link_id",
+          ExpressionAttributeNames: {
+            "#attrName": "value",
+          },
+          ExpressionAttributeValues: {
+            ":new_link_id": id,
+          },
+        })
+      );
+    } else {
+      await dynamodb.send(
+        new PutCommand({
+          TableName: "AppValues",
+          Item: {
+            key: "last_created_link_id",
+            value: id,
+          },
+        })
+      );
+    }
+
+    const data2 = await dynamodb.send(new GetCommand({
+      TableName: "Users",
+      Key:{
+        email: owner_email
+      }
+    }))
+
+    await dynamodb.send(new UpdateCommand({
+      TableName: "Users",
+      Key: {
+        email: owner_email
+      },
+      UpdateExpression: "SET #attrName = :new_value",
+      ExpressionAttributeNames: {
+        "#attrName": "link_ids",
+      },
+      ExpressionAttributeValues: {
+        ":new_value": [...data2.Item.link_ids, id],
+      },
+    }))
+
+    //HERE I HAVE TO SET SCHEDULE FOR DEACTIVATION
 
     return params.Item;
   }
 
-  async removeLink(id: string, owner_email: string): Promise<void> {
-    //checking if user own the link
-    const data = await dynamodb
-      .get({
+  async deactivate(id: string, owner_email: string): Promise<void> {
+    //checking if the user owns the link
+    const data = await dynamodb.send(
+      new GetCommand({
         TableName: "Links",
         Key: {
-          id,
-          owner_email,
+          id
         },
       })
-      .promise();
+    );
     if (!data.Item) {
       CustomError.throwError(404, "Not found");
     }
 
-    //deleting item
-    await dynamodb
-      .delete({
+    //deactivation
+    await dynamodb.send(
+      new UpdateCommand({
         TableName: "Links",
         Key: {
-          id,
-          owner_email,
+          id
+        },
+        UpdateExpression: "SET #attrName = :new_value",
+        ExpressionAttributeNames: {
+          "#attrName": "is_active",
+        },
+        ExpressionAttributeValues: {
+          ":new_value": false,
         },
       })
-      .promise();
+    );
   }
 
-  async getLinksByEmail(email: string) {
-    const data = await dynamodb
-      .scan({
-        TableName: "Links",
-        FilterExpression: "owner_email = :email",
-        ExpressionAttributeValues: {
-          ":email": email,
-        },
-      })
-      .promise();
+  async getAllByEmail(email: string) {
+    //getting user
+    const data1 = await dynamodb.send(new GetCommand({
+      TableName: "Users",
+      Key: {
+        email
+      }
+    }))
+    if(!data1.Item){
+      return []
+    }
 
-    return data.Items.map((item) => ({
-      id: item.id,
-      original_link: item.original_link,
-      expiration_time: item.expiration_time,
-      short_link: item.short_link,
-    }));
+    //getting user links
+    const data4 = await dynamodb.send(new BatchGetCommand({
+      RequestItems: {
+        Links: {
+          Keys: data1.Item.link_ids.map((id: string) => ({id}))
+        }
+      }
+    }))
+
+    return data4.Responses['Links'];
   }
 
   async getLinkById(id: string) {
-    const data = await dynamodb.scan({ TableName: "Links" }).promise();
-    const link = data.Items.find((item) => item.id === id);
-    if (!link) {
-      CustomError.throwError(404, "Not found");
-    }
+    // const data = await dynamodb.scan({ TableName: "Links" }).promise();
+    // const link = data.Items.find((item) => item.id === id);
+    // if (!link) {
+    //   CustomError.throwError(404, "Not found");
+    // }
 
-    if (link.expiration_time === "one-time") {
-      await this.removeLink(link.id, link.owner_email);
-      await sqs
-        .sendMessageBatch({
-          Entries: [
-            {
-              Id: link.id,
-              MessageBody: JSON.stringify(link),
-            },
-          ],
-          QueueUrl: `${process.env.SQS_URL}/notifications`,
-        })
-        .promise();
-    }
+    // if (link.expiration_time === "one-time") {
+    //   await this.deactivate(link.id, link.owner_email);
+      // await sqs
+      //   .sendMessageBatch({
+      //     Entries: [
+      //       {
+      //         Id: link.id,
+      //         MessageBody: JSON.stringify(link),
+      //       },
+      //     ],
+      //     QueueUrl: `${process.env.SQS_URL}/notifications`,
+      //   })
+      //   .promise();
+    // }
 
-    return link.original_link;
+    // return link.original_link;
   }
 }
 

@@ -9,7 +9,7 @@ export const handler = async (
   try {
     const email = tokenService.getEmailFromBearer(event.headers["Authorization"])
 
-    const response = await linkService.getLinksByEmail(email);
+    const response = await linkService.getAllByEmail(email);
 
     return {
       statusCode: 200,

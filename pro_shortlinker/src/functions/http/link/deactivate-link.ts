@@ -18,7 +18,7 @@ export const handler = async (
       CustomError.throwError(400, "Bad Request")
     }
 
-    await linkService.removeLink(link_id, email);
+    await linkService.deactivate(link_id, email);
 
     return {
       statusCode: 200,
