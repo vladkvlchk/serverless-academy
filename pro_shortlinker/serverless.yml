@@ -8,7 +8,11 @@ provider:
   runtime: nodejs18.x
   iam:
     role:
+      name: administrator
       statements:
+        # - Effect: Allow
+        #   Action: "*"
+        #   Resource: "*"
         - Effect: Allow
           Action:
             - dynamodb:Query
@@ -26,8 +30,16 @@ provider:
           Action:
             - ses:SendEmail
             - sqs:SendMessage
-            - sqs:SendMessageBatch
+            - scheduler:CreateSchedule
+            - sts:AssumeRole
+            - lambda:InvokeFunction
+            - iam:PassRole
           Resource: "*"
+        - Effect: Allow
+          Action:
+            - lambda:InvokeFunction
+          Resource:
+            - Fn::GetAtt: [DisableLinkLambdaFunction, Arn]
 
 functions:
   sign-up:
@@ -66,10 +78,17 @@ functions:
       - http:
           path: /{id}
           method: get
-  deleting-expired-links:
-    handler: build/functions/deleting-expired-links.handler
+  disableLink:
+    name: DisableLinkLambdaFunction
+    handler: build/functions/disableLink.handler
     events:
-      - schedule: rate(1 day)
+      - cloudwatchEvent:
+          event:
+            source:
+              - "aws.events"
+          detail:
+            eventName:
+              - "Scheduled Event"
   send-emails:
     handler: build/functions/send-emails.handler
     events:

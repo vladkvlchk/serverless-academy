@@ -1,6 +1,15 @@
+import {
+  BatchGetCommand,
+  GetCommand,
+  PutCommand,
+  UpdateCommand,
+} from "@aws-sdk/lib-dynamodb";
+import { SchedulerClient, CreateScheduleCommand } from "@aws-sdk/client-scheduler"; // ES Modules import
+
 import { dynamodb } from "../aws";
 import CustomError from "../exceptions/custom-error";
-import { BatchExecuteStatementCommand, BatchGetCommand, GetCommand, PutCommand, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+
+const client = new SchedulerClient();
 
 class LinkService {
   async create(
@@ -97,28 +106,59 @@ class LinkService {
       );
     }
 
-    const data2 = await dynamodb.send(new GetCommand({
-      TableName: "Users",
-      Key:{
-        email: owner_email
+    const data2 = await dynamodb.send(
+      new GetCommand({
+        TableName: "Users",
+        Key: {
+          email: owner_email,
+        },
+      })
+    );
+
+    await dynamodb.send(
+      new UpdateCommand({
+        TableName: "Users",
+        Key: {
+          email: owner_email,
+        },
+        UpdateExpression: "SET #attrName = :new_value",
+        ExpressionAttributeNames: {
+          "#attrName": "link_ids",
+        },
+        ExpressionAttributeValues: {
+          ":new_value": [...data2.Item.link_ids, id],
+        },
+      })
+    );
+
+    //setting schedule for deactivation
+
+
+    const expiration = new Date(expiration_time);
+    const yyyy = expiration.getFullYear();
+    const mm = String(expiration.getMonth() + 1).padStart(2, "0"); //January is 0!
+    const dd = String(expiration.getDate()).padStart(2, "0");
+    const hh = String(expiration.getHours()).padStart(2, "0")
+    const mn = String(expiration.getMinutes()).padStart(2, "0")
+    const ss = String(expiration.getSeconds()).padStart(2, "0");
+
+    const date = yyyy + "-" + mm + "-" + dd + "T" + hh + ":" + mn + ":" + ss;
+    const date_test = "2023-11-16T18:35:00"
+
+    const response = await client.send(new CreateScheduleCommand({
+      Name: 'custom-events',
+      ScheduleExpression: `at(${date})`,
+      Target: {
+        Arn: process.env.DISABLELINK_ARN,
+        RoleArn: process.env.IAM_ROLE_ARN3,
+        Input: JSON.stringify({id})
+      },
+      FlexibleTimeWindow:{
+        Mode: "OFF"
       }
-    }))
+    }));
 
-    await dynamodb.send(new UpdateCommand({
-      TableName: "Users",
-      Key: {
-        email: owner_email
-      },
-      UpdateExpression: "SET #attrName = :new_value",
-      ExpressionAttributeNames: {
-        "#attrName": "link_ids",
-      },
-      ExpressionAttributeValues: {
-        ":new_value": [...data2.Item.link_ids, id],
-      },
-    }))
-
-    //HERE I HAVE TO SET SCHEDULE FOR DEACTIVATION
+    console.log(response)
 
     return params.Item;
   }
@@ -129,11 +169,11 @@ class LinkService {
       new GetCommand({
         TableName: "Links",
         Key: {
-          id
+          id,
         },
       })
     );
-    if (!data.Item) {
+    if (!data.Item || data.Item.owner_email !== owner_email) {
       CustomError.throwError(404, "Not found");
     }
 
@@ -142,7 +182,7 @@ class LinkService {
       new UpdateCommand({
         TableName: "Links",
         Key: {
-          id
+          id,
         },
         UpdateExpression: "SET #attrName = :new_value",
         ExpressionAttributeNames: {
@@ -157,26 +197,30 @@ class LinkService {
 
   async getAllByEmail(email: string) {
     //getting user
-    const data1 = await dynamodb.send(new GetCommand({
-      TableName: "Users",
-      Key: {
-        email
-      }
-    }))
-    if(!data1.Item){
-      return []
+    const data1 = await dynamodb.send(
+      new GetCommand({
+        TableName: "Users",
+        Key: {
+          email,
+        },
+      })
+    );
+    if (!data1.Item) {
+      return [];
     }
 
     //getting user links
-    const data4 = await dynamodb.send(new BatchGetCommand({
-      RequestItems: {
-        Links: {
-          Keys: data1.Item.link_ids.map((id: string) => ({id}))
-        }
-      }
-    }))
+    const data4 = await dynamodb.send(
+      new BatchGetCommand({
+        RequestItems: {
+          Links: {
+            Keys: data1.Item.link_ids.map((id: string) => ({ id })),
+          },
+        },
+      })
+    );
 
-    return data4.Responses['Links'];
+    return data4.Responses["Links"];
   }
 
   async getLinkById(id: string) {
@@ -185,22 +229,20 @@ class LinkService {
     // if (!link) {
     //   CustomError.throwError(404, "Not found");
     // }
-
     // if (link.expiration_time === "one-time") {
     //   await this.deactivate(link.id, link.owner_email);
-      // await sqs
-      //   .sendMessageBatch({
-      //     Entries: [
-      //       {
-      //         Id: link.id,
-      //         MessageBody: JSON.stringify(link),
-      //       },
-      //     ],
-      //     QueueUrl: `${process.env.SQS_URL}/notifications`,
-      //   })
-      //   .promise();
+    // await sqs
+    //   .sendMessageBatch({
+    //     Entries: [
+    //       {
+    //         Id: link.id,
+    //         MessageBody: JSON.stringify(link),
+    //       },
+    //     ],
+    //     QueueUrl: `${process.env.SQS_URL}/notifications`,
+    //   })
+    //   .promise();
     // }
-
     // return link.original_link;
   }
 }

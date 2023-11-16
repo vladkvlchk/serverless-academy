@@ -107,10 +107,10 @@
         "LogGroupName": "/aws/lambda/shortlinker-dev-redirect"
       }
     },
-    "DeletingDashexpiredDashlinksLogGroup": {
+    "DisableLinkLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/shortlinker-dev-deleting-expired-links"
+        "LogGroupName": "/aws/lambda/DisableLinkLambdaFunction"
       }
     },
     "SendDashemailsLogGroup": {
@@ -162,6 +162,9 @@
                   ],
                   "Resource": [
                     {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/DisableLinkLambdaFunction:*"
+                    },
+                    {
                       "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/shortlinker-dev*:*"
                     }
                   ]
@@ -172,6 +175,9 @@
                     "logs:PutLogEvents"
                   ],
                   "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/DisableLinkLambdaFunction:*:*"
+                    },
                     {
                       "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/shortlinker-dev*:*:*"
                     }
@@ -214,9 +220,26 @@
                   "Action": [
                     "ses:SendEmail",
                     "sqs:SendMessage",
-                    "sqs:SendMessageBatch"
+                    "scheduler:CreateSchedule",
+                    "sts:AssumeRole",
+                    "lambda:InvokeFunction",
+                    "iam:PassRole"
                   ],
                   "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "lambda:InvokeFunction"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "DisableLinkLambdaFunction",
+                        "Arn"
+                      ]
+                    }
+                  ]
                 },
                 {
                   "Effect": "Allow",
@@ -239,19 +262,7 @@
           }
         ],
         "Path": "/",
-        "RoleName": {
-          "Fn::Join": [
-            "-",
-            [
-              "shortlinker",
-              "dev",
-              {
-                "Ref": "AWS::Region"
-              },
-              "lambdaRole"
-            ]
-          ]
-        }
+        "RoleName": "administrator"
       }
     },
     "EnterpriseLogAccessIamRole": {
@@ -324,7 +335,7 @@
                     },
                     {
                       "Fn::GetAtt": [
-                        "DeletingDashexpiredDashlinksLogGroup",
+                        "DisableLinkLogGroup",
                         "Arn"
                       ]
                     },
@@ -349,7 +360,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/shortlinker/dev/1699930022650-2023-11-14T02:47:02.650Z/shortlinker.zip"
+          "S3Key": "serverless/shortlinker/dev/1700152560549-2023-11-16T16:36:00.549Z/shortlinker.zip"
         },
         "Handler": "s_sign_up.handler",
         "Runtime": "nodejs18.x",
@@ -364,7 +375,19 @@
             "PRIVATE_KEY": "privateKey11",
             "HOST": "https://uqhx0yf00h.execute-api.us-east-1.amazonaws.com/dev",
             "SQS_URL": "https://sqs.us-east-1.amazonaws.com/421735757798",
-            "SENDER_EMAIL": "trainenglish4444@gmail.com"
+            "SENDER_EMAIL": "trainenglish4444@gmail.com",
+            "IAM_ROLE_ARN": "arn:aws:iam::421735757798:role/ServerlessRole",
+            "IAM_ROLE_ARN2": "arn:aws:iam::421735757798:role/shortlinker-dev-us-east-1-lambdaRole",
+            "IAM_ROLE_ARN3": "arn:aws:iam::421735757798:role/administrator",
+            "IAM_ROLE_ARN4": "arn:aws:iam::421735757798:role/administrator6",
+            "IAM_ROLE_ARN5": "arn:aws:iam::421735757798:user/ServerlessAccount",
+            "IAM_ROLE_ARN6": "ServerlessRole",
+            "IAM_ROLE_ARN7": "arn:aws:iam::421735757798:role/aws-service-role/trustedadvisor.amazonaws.com/AWSServiceRoleForTrustedAdvisor",
+            "IAM_ROLE_ARN8": "arn:aws:iam::421735757798:role/aws-service-role/support.amazonaws.com/AWSServiceRoleForSupport",
+            "IAM_ROLE_ARN9": "arn:aws:iam::421735757798:role/aws-service-role/ops.apigateway.amazonaws.com/AWSServiceRoleForAPIGateway",
+            "IAM_ROLE_ARN100500": "arn:aws:iam::421735757798:role/service-role/role_100500",
+            "DISABLELINK_ARN": "arn:aws:lambda:us-east-1:421735757798:function:shortlinker-dev-disableLink44",
+            "PATTERN": "arn:aws(-[a-z]+)?:iam::\\\\d{12}:role\\/[\\\\w+=,.@\\/-]+"
           }
         },
         "Role": {
@@ -385,7 +408,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/shortlinker/dev/1699930022650-2023-11-14T02:47:02.650Z/shortlinker.zip"
+          "S3Key": "serverless/shortlinker/dev/1700152560549-2023-11-16T16:36:00.549Z/shortlinker.zip"
         },
         "Handler": "s_sign_in.handler",
         "Runtime": "nodejs18.x",
@@ -400,7 +423,19 @@
             "PRIVATE_KEY": "privateKey11",
             "HOST": "https://uqhx0yf00h.execute-api.us-east-1.amazonaws.com/dev",
             "SQS_URL": "https://sqs.us-east-1.amazonaws.com/421735757798",
-            "SENDER_EMAIL": "trainenglish4444@gmail.com"
+            "SENDER_EMAIL": "trainenglish4444@gmail.com",
+            "IAM_ROLE_ARN": "arn:aws:iam::421735757798:role/ServerlessRole",
+            "IAM_ROLE_ARN2": "arn:aws:iam::421735757798:role/shortlinker-dev-us-east-1-lambdaRole",
+            "IAM_ROLE_ARN3": "arn:aws:iam::421735757798:role/administrator",
+            "IAM_ROLE_ARN4": "arn:aws:iam::421735757798:role/administrator6",
+            "IAM_ROLE_ARN5": "arn:aws:iam::421735757798:user/ServerlessAccount",
+            "IAM_ROLE_ARN6": "ServerlessRole",
+            "IAM_ROLE_ARN7": "arn:aws:iam::421735757798:role/aws-service-role/trustedadvisor.amazonaws.com/AWSServiceRoleForTrustedAdvisor",
+            "IAM_ROLE_ARN8": "arn:aws:iam::421735757798:role/aws-service-role/support.amazonaws.com/AWSServiceRoleForSupport",
+            "IAM_ROLE_ARN9": "arn:aws:iam::421735757798:role/aws-service-role/ops.apigateway.amazonaws.com/AWSServiceRoleForAPIGateway",
+            "IAM_ROLE_ARN100500": "arn:aws:iam::421735757798:role/service-role/role_100500",
+            "DISABLELINK_ARN": "arn:aws:lambda:us-east-1:421735757798:function:shortlinker-dev-disableLink44",
+            "PATTERN": "arn:aws(-[a-z]+)?:iam::\\\\d{12}:role\\/[\\\\w+=,.@\\/-]+"
           }
         },
         "Role": {
@@ -421,7 +456,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/shortlinker/dev/1699930022650-2023-11-14T02:47:02.650Z/shortlinker.zip"
+          "S3Key": "serverless/shortlinker/dev/1700152560549-2023-11-16T16:36:00.549Z/shortlinker.zip"
         },
         "Handler": "s_create_link.handler",
         "Runtime": "nodejs18.x",
@@ -436,7 +471,19 @@
             "PRIVATE_KEY": "privateKey11",
             "HOST": "https://uqhx0yf00h.execute-api.us-east-1.amazonaws.com/dev",
             "SQS_URL": "https://sqs.us-east-1.amazonaws.com/421735757798",
-            "SENDER_EMAIL": "trainenglish4444@gmail.com"
+            "SENDER_EMAIL": "trainenglish4444@gmail.com",
+            "IAM_ROLE_ARN": "arn:aws:iam::421735757798:role/ServerlessRole",
+            "IAM_ROLE_ARN2": "arn:aws:iam::421735757798:role/shortlinker-dev-us-east-1-lambdaRole",
+            "IAM_ROLE_ARN3": "arn:aws:iam::421735757798:role/administrator",
+            "IAM_ROLE_ARN4": "arn:aws:iam::421735757798:role/administrator6",
+            "IAM_ROLE_ARN5": "arn:aws:iam::421735757798:user/ServerlessAccount",
+            "IAM_ROLE_ARN6": "ServerlessRole",
+            "IAM_ROLE_ARN7": "arn:aws:iam::421735757798:role/aws-service-role/trustedadvisor.amazonaws.com/AWSServiceRoleForTrustedAdvisor",
+            "IAM_ROLE_ARN8": "arn:aws:iam::421735757798:role/aws-service-role/support.amazonaws.com/AWSServiceRoleForSupport",
+            "IAM_ROLE_ARN9": "arn:aws:iam::421735757798:role/aws-service-role/ops.apigateway.amazonaws.com/AWSServiceRoleForAPIGateway",
+            "IAM_ROLE_ARN100500": "arn:aws:iam::421735757798:role/service-role/role_100500",
+            "DISABLELINK_ARN": "arn:aws:lambda:us-east-1:421735757798:function:shortlinker-dev-disableLink44",
+            "PATTERN": "arn:aws(-[a-z]+)?:iam::\\\\d{12}:role\\/[\\\\w+=,.@\\/-]+"
           }
         },
         "Role": {
@@ -457,7 +504,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/shortlinker/dev/1699930022650-2023-11-14T02:47:02.650Z/shortlinker.zip"
+          "S3Key": "serverless/shortlinker/dev/1700152560549-2023-11-16T16:36:00.549Z/shortlinker.zip"
         },
         "Handler": "s_deactivate_link.handler",
         "Runtime": "nodejs18.x",
@@ -472,7 +519,19 @@
             "PRIVATE_KEY": "privateKey11",
             "HOST": "https://uqhx0yf00h.execute-api.us-east-1.amazonaws.com/dev",
             "SQS_URL": "https://sqs.us-east-1.amazonaws.com/421735757798",
-            "SENDER_EMAIL": "trainenglish4444@gmail.com"
+            "SENDER_EMAIL": "trainenglish4444@gmail.com",
+            "IAM_ROLE_ARN": "arn:aws:iam::421735757798:role/ServerlessRole",
+            "IAM_ROLE_ARN2": "arn:aws:iam::421735757798:role/shortlinker-dev-us-east-1-lambdaRole",
+            "IAM_ROLE_ARN3": "arn:aws:iam::421735757798:role/administrator",
+            "IAM_ROLE_ARN4": "arn:aws:iam::421735757798:role/administrator6",
+            "IAM_ROLE_ARN5": "arn:aws:iam::421735757798:user/ServerlessAccount",
+            "IAM_ROLE_ARN6": "ServerlessRole",
+            "IAM_ROLE_ARN7": "arn:aws:iam::421735757798:role/aws-service-role/trustedadvisor.amazonaws.com/AWSServiceRoleForTrustedAdvisor",
+            "IAM_ROLE_ARN8": "arn:aws:iam::421735757798:role/aws-service-role/support.amazonaws.com/AWSServiceRoleForSupport",
+            "IAM_ROLE_ARN9": "arn:aws:iam::421735757798:role/aws-service-role/ops.apigateway.amazonaws.com/AWSServiceRoleForAPIGateway",
+            "IAM_ROLE_ARN100500": "arn:aws:iam::421735757798:role/service-role/role_100500",
+            "DISABLELINK_ARN": "arn:aws:lambda:us-east-1:421735757798:function:shortlinker-dev-disableLink44",
+            "PATTERN": "arn:aws(-[a-z]+)?:iam::\\\\d{12}:role\\/[\\\\w+=,.@\\/-]+"
           }
         },
         "Role": {
@@ -493,7 +552,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/shortlinker/dev/1699930022650-2023-11-14T02:47:02.650Z/shortlinker.zip"
+          "S3Key": "serverless/shortlinker/dev/1700152560549-2023-11-16T16:36:00.549Z/shortlinker.zip"
         },
         "Handler": "s_links_by_user.handler",
         "Runtime": "nodejs18.x",
@@ -508,7 +567,19 @@
             "PRIVATE_KEY": "privateKey11",
             "HOST": "https://uqhx0yf00h.execute-api.us-east-1.amazonaws.com/dev",
             "SQS_URL": "https://sqs.us-east-1.amazonaws.com/421735757798",
-            "SENDER_EMAIL": "trainenglish4444@gmail.com"
+            "SENDER_EMAIL": "trainenglish4444@gmail.com",
+            "IAM_ROLE_ARN": "arn:aws:iam::421735757798:role/ServerlessRole",
+            "IAM_ROLE_ARN2": "arn:aws:iam::421735757798:role/shortlinker-dev-us-east-1-lambdaRole",
+            "IAM_ROLE_ARN3": "arn:aws:iam::421735757798:role/administrator",
+            "IAM_ROLE_ARN4": "arn:aws:iam::421735757798:role/administrator6",
+            "IAM_ROLE_ARN5": "arn:aws:iam::421735757798:user/ServerlessAccount",
+            "IAM_ROLE_ARN6": "ServerlessRole",
+            "IAM_ROLE_ARN7": "arn:aws:iam::421735757798:role/aws-service-role/trustedadvisor.amazonaws.com/AWSServiceRoleForTrustedAdvisor",
+            "IAM_ROLE_ARN8": "arn:aws:iam::421735757798:role/aws-service-role/support.amazonaws.com/AWSServiceRoleForSupport",
+            "IAM_ROLE_ARN9": "arn:aws:iam::421735757798:role/aws-service-role/ops.apigateway.amazonaws.com/AWSServiceRoleForAPIGateway",
+            "IAM_ROLE_ARN100500": "arn:aws:iam::421735757798:role/service-role/role_100500",
+            "DISABLELINK_ARN": "arn:aws:lambda:us-east-1:421735757798:function:shortlinker-dev-disableLink44",
+            "PATTERN": "arn:aws(-[a-z]+)?:iam::\\\\d{12}:role\\/[\\\\w+=,.@\\/-]+"
           }
         },
         "Role": {
@@ -529,7 +600,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/shortlinker/dev/1699930022650-2023-11-14T02:47:02.650Z/shortlinker.zip"
+          "S3Key": "serverless/shortlinker/dev/1700152560549-2023-11-16T16:36:00.549Z/shortlinker.zip"
         },
         "Handler": "s_redirect.handler",
         "Runtime": "nodejs18.x",
@@ -544,7 +615,19 @@
             "PRIVATE_KEY": "privateKey11",
             "HOST": "https://uqhx0yf00h.execute-api.us-east-1.amazonaws.com/dev",
             "SQS_URL": "https://sqs.us-east-1.amazonaws.com/421735757798",
-            "SENDER_EMAIL": "trainenglish4444@gmail.com"
+            "SENDER_EMAIL": "trainenglish4444@gmail.com",
+            "IAM_ROLE_ARN": "arn:aws:iam::421735757798:role/ServerlessRole",
+            "IAM_ROLE_ARN2": "arn:aws:iam::421735757798:role/shortlinker-dev-us-east-1-lambdaRole",
+            "IAM_ROLE_ARN3": "arn:aws:iam::421735757798:role/administrator",
+            "IAM_ROLE_ARN4": "arn:aws:iam::421735757798:role/administrator6",
+            "IAM_ROLE_ARN5": "arn:aws:iam::421735757798:user/ServerlessAccount",
+            "IAM_ROLE_ARN6": "ServerlessRole",
+            "IAM_ROLE_ARN7": "arn:aws:iam::421735757798:role/aws-service-role/trustedadvisor.amazonaws.com/AWSServiceRoleForTrustedAdvisor",
+            "IAM_ROLE_ARN8": "arn:aws:iam::421735757798:role/aws-service-role/support.amazonaws.com/AWSServiceRoleForSupport",
+            "IAM_ROLE_ARN9": "arn:aws:iam::421735757798:role/aws-service-role/ops.apigateway.amazonaws.com/AWSServiceRoleForAPIGateway",
+            "IAM_ROLE_ARN100500": "arn:aws:iam::421735757798:role/service-role/role_100500",
+            "DISABLELINK_ARN": "arn:aws:lambda:us-east-1:421735757798:function:shortlinker-dev-disableLink44",
+            "PATTERN": "arn:aws(-[a-z]+)?:iam::\\\\d{12}:role\\/[\\\\w+=,.@\\/-]+"
           }
         },
         "Role": {
@@ -558,18 +641,18 @@
         "RedirectLogGroup"
       ]
     },
-    "DeletingDashexpiredDashlinksLambdaFunction": {
+    "DisableLinkLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/shortlinker/dev/1699930022650-2023-11-14T02:47:02.650Z/shortlinker.zip"
+          "S3Key": "serverless/shortlinker/dev/1700152560549-2023-11-16T16:36:00.549Z/shortlinker.zip"
         },
-        "Handler": "s_deleting_expired_links.handler",
+        "Handler": "s_disableLink.handler",
         "Runtime": "nodejs18.x",
-        "FunctionName": "shortlinker-dev-deleting-expired-links",
+        "FunctionName": "DisableLinkLambdaFunction",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
@@ -580,7 +663,19 @@
             "PRIVATE_KEY": "privateKey11",
             "HOST": "https://uqhx0yf00h.execute-api.us-east-1.amazonaws.com/dev",
             "SQS_URL": "https://sqs.us-east-1.amazonaws.com/421735757798",
-            "SENDER_EMAIL": "trainenglish4444@gmail.com"
+            "SENDER_EMAIL": "trainenglish4444@gmail.com",
+            "IAM_ROLE_ARN": "arn:aws:iam::421735757798:role/ServerlessRole",
+            "IAM_ROLE_ARN2": "arn:aws:iam::421735757798:role/shortlinker-dev-us-east-1-lambdaRole",
+            "IAM_ROLE_ARN3": "arn:aws:iam::421735757798:role/administrator",
+            "IAM_ROLE_ARN4": "arn:aws:iam::421735757798:role/administrator6",
+            "IAM_ROLE_ARN5": "arn:aws:iam::421735757798:user/ServerlessAccount",
+            "IAM_ROLE_ARN6": "ServerlessRole",
+            "IAM_ROLE_ARN7": "arn:aws:iam::421735757798:role/aws-service-role/trustedadvisor.amazonaws.com/AWSServiceRoleForTrustedAdvisor",
+            "IAM_ROLE_ARN8": "arn:aws:iam::421735757798:role/aws-service-role/support.amazonaws.com/AWSServiceRoleForSupport",
+            "IAM_ROLE_ARN9": "arn:aws:iam::421735757798:role/aws-service-role/ops.apigateway.amazonaws.com/AWSServiceRoleForAPIGateway",
+            "IAM_ROLE_ARN100500": "arn:aws:iam::421735757798:role/service-role/role_100500",
+            "DISABLELINK_ARN": "arn:aws:lambda:us-east-1:421735757798:function:shortlinker-dev-disableLink44",
+            "PATTERN": "arn:aws(-[a-z]+)?:iam::\\\\d{12}:role\\/[\\\\w+=,.@\\/-]+"
           }
         },
         "Role": {
@@ -591,7 +686,7 @@
         }
       },
       "DependsOn": [
-        "DeletingDashexpiredDashlinksLogGroup"
+        "DisableLinkLogGroup"
       ]
     },
     "SendDashemailsLambdaFunction": {
@@ -601,7 +696,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/shortlinker/dev/1699930022650-2023-11-14T02:47:02.650Z/shortlinker.zip"
+          "S3Key": "serverless/shortlinker/dev/1700152560549-2023-11-16T16:36:00.549Z/shortlinker.zip"
         },
         "Handler": "s_send_emails.handler",
         "Runtime": "nodejs18.x",
@@ -616,7 +711,19 @@
             "PRIVATE_KEY": "privateKey11",
             "HOST": "https://uqhx0yf00h.execute-api.us-east-1.amazonaws.com/dev",
             "SQS_URL": "https://sqs.us-east-1.amazonaws.com/421735757798",
-            "SENDER_EMAIL": "trainenglish4444@gmail.com"
+            "SENDER_EMAIL": "trainenglish4444@gmail.com",
+            "IAM_ROLE_ARN": "arn:aws:iam::421735757798:role/ServerlessRole",
+            "IAM_ROLE_ARN2": "arn:aws:iam::421735757798:role/shortlinker-dev-us-east-1-lambdaRole",
+            "IAM_ROLE_ARN3": "arn:aws:iam::421735757798:role/administrator",
+            "IAM_ROLE_ARN4": "arn:aws:iam::421735757798:role/administrator6",
+            "IAM_ROLE_ARN5": "arn:aws:iam::421735757798:user/ServerlessAccount",
+            "IAM_ROLE_ARN6": "ServerlessRole",
+            "IAM_ROLE_ARN7": "arn:aws:iam::421735757798:role/aws-service-role/trustedadvisor.amazonaws.com/AWSServiceRoleForTrustedAdvisor",
+            "IAM_ROLE_ARN8": "arn:aws:iam::421735757798:role/aws-service-role/support.amazonaws.com/AWSServiceRoleForSupport",
+            "IAM_ROLE_ARN9": "arn:aws:iam::421735757798:role/aws-service-role/ops.apigateway.amazonaws.com/AWSServiceRoleForAPIGateway",
+            "IAM_ROLE_ARN100500": "arn:aws:iam::421735757798:role/service-role/role_100500",
+            "DISABLELINK_ARN": "arn:aws:lambda:us-east-1:421735757798:function:shortlinker-dev-disableLink44",
+            "PATTERN": "arn:aws(-[a-z]+)?:iam::\\\\d{12}:role\\/[\\\\w+=,.@\\/-]+"
           }
         },
         "Role": {
@@ -630,121 +737,84 @@
         "SendDashemailsLogGroup"
       ]
     },
-    "SignDashupLambdaVersion9KjMxhOzDXaBwBJWnsdHOQ1I9xerT140lADsNldlTlU": {
+    "SignDashupLambdaVersionhiPTxkasCEPUyV2FBePKyhafYfcw7CRWProwMOkM": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "SignDashupLambdaFunction"
         },
-        "CodeSha256": "tEv26Gm4UqmJCWiBU8CFtcuQJVkp8ROIh2U9aqPP8Cc="
+        "CodeSha256": "RwHYboiyCPdnuhFsrd7L/4HFsdeyoiyAblvOPuqvL/g="
       }
     },
-    "SignDashinLambdaVersionR1ZtMnxuN7FVfbdWUtAUwOa4M1QdjdCxkiDBt6pMs": {
+    "SignDashinLambdaVersionv2IGNSA29rqORePzfAOUF1swBB13AZOl2FFPwmbc2cg": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "SignDashinLambdaFunction"
         },
-        "CodeSha256": "tEv26Gm4UqmJCWiBU8CFtcuQJVkp8ROIh2U9aqPP8Cc="
+        "CodeSha256": "RwHYboiyCPdnuhFsrd7L/4HFsdeyoiyAblvOPuqvL/g="
       }
     },
-    "CreateDashlinkLambdaVersionmgZvlrwCEVg0fCt2WZxQhjy06sYdgaPsm6ioCqfoDUE": {
+    "CreateDashlinkLambdaVersion6seU2YaRYKMhc5KQEybjVLUCGUjSsqjsbu2OJRuDtio": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CreateDashlinkLambdaFunction"
         },
-        "CodeSha256": "tEv26Gm4UqmJCWiBU8CFtcuQJVkp8ROIh2U9aqPP8Cc="
+        "CodeSha256": "RwHYboiyCPdnuhFsrd7L/4HFsdeyoiyAblvOPuqvL/g="
       }
     },
-    "DeactivateDashlinkLambdaVersionc0QEJAMXpcqUTKapxp6VvIZzrTskuSiv384W5NpmY": {
+    "DeactivateDashlinkLambdaVersionw4Pe8zbnFeURVoqciVbbvSytyvP1J6bIzBYUSUMiuI": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "DeactivateDashlinkLambdaFunction"
         },
-        "CodeSha256": "tEv26Gm4UqmJCWiBU8CFtcuQJVkp8ROIh2U9aqPP8Cc="
+        "CodeSha256": "RwHYboiyCPdnuhFsrd7L/4HFsdeyoiyAblvOPuqvL/g="
       }
     },
-    "LinksDashbyDashuserLambdaVersionRndn3wmDXbuvmrXNli3H9jd8rgWbbHCRpyliudAKE": {
+    "LinksDashbyDashuserLambdaVersionZ4HNzOy8kQ0HPikl00De6k8RRBWKB0El4imORlOuA4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "LinksDashbyDashuserLambdaFunction"
         },
-        "CodeSha256": "tEv26Gm4UqmJCWiBU8CFtcuQJVkp8ROIh2U9aqPP8Cc="
+        "CodeSha256": "RwHYboiyCPdnuhFsrd7L/4HFsdeyoiyAblvOPuqvL/g="
       }
     },
-    "RedirectLambdaVersionFYujX3Fqeb8STjFIyRDagt4uvxVMylDprkf99An8Q": {
+    "RedirectLambdaVersion5mbGfHxVuMiaNph9ZsDsJufSznfahkqJIMkAwCmDuE": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "RedirectLambdaFunction"
         },
-        "CodeSha256": "tEv26Gm4UqmJCWiBU8CFtcuQJVkp8ROIh2U9aqPP8Cc="
+        "CodeSha256": "RwHYboiyCPdnuhFsrd7L/4HFsdeyoiyAblvOPuqvL/g="
       }
     },
-    "DeletingDashexpiredDashlinksLambdaVersionHRKihvVdVe8YQXhpIpnJ0hM9iEVpuaTZxfI6VmikiNQ": {
+    "DisableLinkLambdaVersionJdZeMO55heisVU9vNjIxtQCYvGJ0Eol6RvU8vOn8wmc": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
-          "Ref": "DeletingDashexpiredDashlinksLambdaFunction"
+          "Ref": "DisableLinkLambdaFunction"
         },
-        "CodeSha256": "tEv26Gm4UqmJCWiBU8CFtcuQJVkp8ROIh2U9aqPP8Cc="
+        "CodeSha256": "RwHYboiyCPdnuhFsrd7L/4HFsdeyoiyAblvOPuqvL/g="
       }
     },
-    "SendDashemailsLambdaVersionuFE2z4qLrHnlZnji9vkfkhGak3FMoWOP6cKJZFbPAw": {
+    "SendDashemailsLambdaVersionh60FtofnprCLXMbsuCfXTzf3dER6ugKoRTA6IG9vs": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "SendDashemailsLambdaFunction"
         },
-        "CodeSha256": "tEv26Gm4UqmJCWiBU8CFtcuQJVkp8ROIh2U9aqPP8Cc="
-      }
-    },
-    "DeletingDashexpiredDashlinksEventsRuleSchedule1": {
-      "Type": "AWS::Events::Rule",
-      "Properties": {
-        "ScheduleExpression": "rate(1 day)",
-        "State": "ENABLED",
-        "Targets": [
-          {
-            "Arn": {
-              "Fn::GetAtt": [
-                "DeletingDashexpiredDashlinksLambdaFunction",
-                "Arn"
-              ]
-            },
-            "Id": "deleting-expired-linksSchedule"
-          }
-        ]
-      }
-    },
-    "DeletingDashexpiredDashlinksLambdaPermissionEventsRuleSchedule1": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "DeletingDashexpiredDashlinksLambdaFunction",
-            "Arn"
-          ]
-        },
-        "Action": "lambda:InvokeFunction",
-        "Principal": "events.amazonaws.com",
-        "SourceArn": {
-          "Fn::GetAtt": [
-            "DeletingDashexpiredDashlinksEventsRuleSchedule1",
-            "Arn"
-          ]
-        }
+        "CodeSha256": "RwHYboiyCPdnuhFsrd7L/4HFsdeyoiyAblvOPuqvL/g="
       }
     },
     "ApiGatewayRestApi": {
@@ -1143,7 +1213,7 @@
         "RedirectLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1699930013049": {
+    "ApiGatewayDeployment1700152552295": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -1491,7 +1561,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/shortlinker/dev/1699930022650-2023-11-14T02:47:02.650Z/custom-resources.zip"
+          "S3Key": "serverless/shortlinker/dev/1700152560549-2023-11-16T16:36:00.549Z/custom-resources.zip"
         },
         "FunctionName": "shortlinker-dev-custom-resource-apigw-cw-role",
         "Handler": "api-gateway-cloud-watch-role/handler.handler",
@@ -1508,6 +1578,47 @@
       "DependsOn": [
         "IamRoleCustomResourcesLambdaExecution"
       ]
+    },
+    "DisableLinkEventsRuleCloudWatchEvent1": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "EventPattern": {
+          "source": [
+            "aws.events"
+          ]
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "DisableLinkLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Id": "disableLinkCloudWatchEvent"
+          }
+        ]
+      }
+    },
+    "DisableLinkLambdaPermissionEventsRuleCloudWatchEvent1": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "DisableLinkLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "DisableLinkEventsRuleCloudWatchEvent1",
+            "Arn"
+          ]
+        }
+      }
     },
     "SendDashemailsEventSourceMappingSQSNotificationsQueue": {
       "Type": "AWS::Lambda::EventSourceMapping",
@@ -1621,7 +1732,7 @@
     "SignDashupLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "SignDashupLambdaVersion9KjMxhOzDXaBwBJWnsdHOQ1I9xerT140lADsNldlTlU"
+        "Ref": "SignDashupLambdaVersionhiPTxkasCEPUyV2FBePKyhafYfcw7CRWProwMOkM"
       },
       "Export": {
         "Name": "sls-shortlinker-dev-SignDashupLambdaFunctionQualifiedArn"
@@ -1630,7 +1741,7 @@
     "SignDashinLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "SignDashinLambdaVersionR1ZtMnxuN7FVfbdWUtAUwOa4M1QdjdCxkiDBt6pMs"
+        "Ref": "SignDashinLambdaVersionv2IGNSA29rqORePzfAOUF1swBB13AZOl2FFPwmbc2cg"
       },
       "Export": {
         "Name": "sls-shortlinker-dev-SignDashinLambdaFunctionQualifiedArn"
@@ -1639,7 +1750,7 @@
     "CreateDashlinkLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CreateDashlinkLambdaVersionmgZvlrwCEVg0fCt2WZxQhjy06sYdgaPsm6ioCqfoDUE"
+        "Ref": "CreateDashlinkLambdaVersion6seU2YaRYKMhc5KQEybjVLUCGUjSsqjsbu2OJRuDtio"
       },
       "Export": {
         "Name": "sls-shortlinker-dev-CreateDashlinkLambdaFunctionQualifiedArn"
@@ -1648,7 +1759,7 @@
     "DeactivateDashlinkLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "DeactivateDashlinkLambdaVersionc0QEJAMXpcqUTKapxp6VvIZzrTskuSiv384W5NpmY"
+        "Ref": "DeactivateDashlinkLambdaVersionw4Pe8zbnFeURVoqciVbbvSytyvP1J6bIzBYUSUMiuI"
       },
       "Export": {
         "Name": "sls-shortlinker-dev-DeactivateDashlinkLambdaFunctionQualifiedArn"
@@ -1657,7 +1768,7 @@
     "LinksDashbyDashuserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "LinksDashbyDashuserLambdaVersionRndn3wmDXbuvmrXNli3H9jd8rgWbbHCRpyliudAKE"
+        "Ref": "LinksDashbyDashuserLambdaVersionZ4HNzOy8kQ0HPikl00De6k8RRBWKB0El4imORlOuA4"
       },
       "Export": {
         "Name": "sls-shortlinker-dev-LinksDashbyDashuserLambdaFunctionQualifiedArn"
@@ -1666,25 +1777,25 @@
     "RedirectLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "RedirectLambdaVersionFYujX3Fqeb8STjFIyRDagt4uvxVMylDprkf99An8Q"
+        "Ref": "RedirectLambdaVersion5mbGfHxVuMiaNph9ZsDsJufSznfahkqJIMkAwCmDuE"
       },
       "Export": {
         "Name": "sls-shortlinker-dev-RedirectLambdaFunctionQualifiedArn"
       }
     },
-    "DeletingDashexpiredDashlinksLambdaFunctionQualifiedArn": {
+    "DisableLinkLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "DeletingDashexpiredDashlinksLambdaVersionHRKihvVdVe8YQXhpIpnJ0hM9iEVpuaTZxfI6VmikiNQ"
+        "Ref": "DisableLinkLambdaVersionJdZeMO55heisVU9vNjIxtQCYvGJ0Eol6RvU8vOn8wmc"
       },
       "Export": {
-        "Name": "sls-shortlinker-dev-DeletingDashexpiredDashlinksLambdaFunctionQualifiedArn"
+        "Name": "sls-shortlinker-dev-DisableLinkLambdaFunctionQualifiedArn"
       }
     },
     "SendDashemailsLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "SendDashemailsLambdaVersionuFE2z4qLrHnlZnji9vkfkhGak3FMoWOP6cKJZFbPAw"
+        "Ref": "SendDashemailsLambdaVersionh60FtofnprCLXMbsuCfXTzf3dER6ugKoRTA6IG9vs"
       },
       "Export": {
         "Name": "sls-shortlinker-dev-SendDashemailsLambdaFunctionQualifiedArn"
